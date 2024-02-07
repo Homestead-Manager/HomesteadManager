@@ -1,15 +1,30 @@
 ﻿@page "/"
-
+@inject NavigationManager _nav
+<style>
+    .homestead-card {
+        cursor: pointer;
+        width: 18rem;
+        margin-bottom: 10px;
+    }
+    .homestead-card:hover {
+        background-color: gray;
+    }
+</style>
 <PageTitle>Home</PageTitle>
 
 <h1>Homesteads</h1>
 
-<ul>
-    @foreach (var hs in homesteads)
-    {
-        <li>@hs.Name</li>
-    }
-</ul>
+@foreach (var hs in homesteads)
+{
+    <div class="homestead-card">
+        <Card @onclick="@(()=>_nav.NavigateTo("/homesteads/" + @hs.Guid))" class="homestead-card">
+            <CardBody>
+                <CardTitle>@hs.Name</CardTitle>
+            </CardBody>
+        </Card>
+    </div>
+
+}
 
 <form @onsubmit="AddHomestead">
     <input placeholder="Homestead Name" @bind="newHomesteadName" />
@@ -18,13 +33,13 @@
 
 @code {
     private string? newHomesteadName;
-    private List<Homestead> homesteads = new();
+    private List<Homestead> homesteads = new List<Homestead> { { new Homestead { Name = "Haven Farm", Guid = Guid.NewGuid().ToString() }}};
 
     private void AddHomestead()
     {
         if (!string.IsNullOrWhiteSpace(newHomesteadName))
         {
-            homesteads.Add(new Homestead { Guid = Guid.NewGuid(), Name = newHomesteadName });
+            homesteads.Add(new Homestead { Guid = Guid.NewGuid().ToString(), Name = newHomesteadName });
             newHomesteadName = string.Empty;
         }
     }

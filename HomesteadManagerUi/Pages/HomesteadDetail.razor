@@ -1,0 +1,11 @@
+﻿@page "/homesteads/{id}"
+
+<PageTitle>Home</PageTitle>
+
+<h1>@homestead.Name</h1>
+
+@code {
+    [Parameter]
+    public string? id {get; set; }
+    private Homestead homestead = new Homestead { Name = "Haven Farm", Guid = Guid.NewGuid().ToString() };
+}
