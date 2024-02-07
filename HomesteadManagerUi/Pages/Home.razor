@@ -2,6 +2,30 @@
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>Homesteads</h1>
 
-Welcome to your new app.
+<ul>
+    @foreach (var hs in homesteads)
+    {
+        <li>@hs.Name</li>
+    }
+</ul>
+
+<form @onsubmit="AddHomestead">
+    <input placeholder="Homestead Name" @bind="newHomesteadName" />
+    <button>Add Homestead</button>
+</form>
+
+@code {
+    private string? newHomesteadName;
+    private List<Homestead> homesteads = new();
+
+    private void AddHomestead()
+    {
+        if (!string.IsNullOrWhiteSpace(newHomesteadName))
+        {
+            homesteads.Add(new Homestead { Guid = Guid.NewGuid(), Name = newHomesteadName });
+            newHomesteadName = string.Empty;
+        }
+    }
+}
