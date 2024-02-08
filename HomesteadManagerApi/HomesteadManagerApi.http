@@ -1,0 +1,6 @@
+@HomesteadManagerApi_HostAddress = http://localhost:5271
+
+GET {{HomesteadManagerApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

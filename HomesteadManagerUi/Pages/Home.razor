@@ -17,7 +17,7 @@
 @foreach (var hs in homesteads)
 {
     <div class="homestead-card">
-        <Card @onclick="@(()=>_nav.NavigateTo("/homesteads/" + @hs.Guid))" class="homestead-card">
+        <Card @onclick="@(()=>_nav.NavigateTo("/homesteads/" + @hs.Id))" class="homestead-card">
             <CardBody>
                 <CardTitle>@hs.Name</CardTitle>
             </CardBody>
@@ -33,13 +33,13 @@
 
 @code {
     private string? newHomesteadName;
-    private List<Homestead> homesteads = new List<Homestead> { { new Homestead { Name = "Haven Farm", Guid = Guid.NewGuid().ToString() }}};
+    private List<Homestead> homesteads = new List<Homestead> { { new Homestead { Name = "Haven Farm", Id = Guid.NewGuid().ToString() }}};
 
     private void AddHomestead()
     {
         if (!string.IsNullOrWhiteSpace(newHomesteadName))
         {
-            homesteads.Add(new Homestead { Guid = Guid.NewGuid().ToString(), Name = newHomesteadName });
+            homesteads.Add(new Homestead { Id = Guid.NewGuid().ToString(), Name = newHomesteadName });
             newHomesteadName = string.Empty;
         }
     }
