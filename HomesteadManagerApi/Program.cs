@@ -1,5 +1,6 @@
 using HomesteadManagerApi.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +26,10 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
+app.UseCors(policy => 
+    policy.WithOrigins("http://localhost:5204")
+    .AllowAnyMethod()
+    .WithHeaders(HeaderNames.ContentType));
 app.MapControllers();
 
 app.Run();

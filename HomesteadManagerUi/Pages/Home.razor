@@ -1,5 +1,6 @@
 ﻿@page "/"
 @inject NavigationManager _nav
+@inject HttpClient Http
 <style>
     .homestead-card {
         cursor: pointer;
@@ -33,14 +34,19 @@
 
 @code {
     private string? newHomesteadName;
-    private List<Homestead> homesteads = new List<Homestead> { { new Homestead { Name = "Haven Farm", Id = Guid.NewGuid().ToString() }}};
+    private List<Homestead> homesteads = new();
 
+
+    protected override async Task OnInitializedAsync() =>
+        homesteads = await Http.GetFromJsonAsync<List<Homestead>>("api/Homestead") ?? [];
+            
     private void AddHomestead()
     {
         if (!string.IsNullOrWhiteSpace(newHomesteadName))
         {
-            homesteads.Add(new Homestead { Id = Guid.NewGuid().ToString(), Name = newHomesteadName });
-            newHomesteadName = string.Empty;
+            var homestead = new Homestead { Id = Guid.NewGuid().ToString(), Name = newHomesteadName };
+            homesteads.Add(homestead);
+            Http.PostAsJsonAsync<Homestead>("api/Homestead", homestead);
         }
     }
 }
