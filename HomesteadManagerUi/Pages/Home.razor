@@ -17,23 +17,20 @@
 
 @foreach (var hs in homesteads)
 {
-    <div class="homestead-card">
-        <Card @onclick="@(()=>_nav.NavigateTo("/homesteads/" + @hs.Id))" class="homestead-card">
-            <CardBody>
-                <CardTitle>@hs.Name</CardTitle>
-            </CardBody>
-        </Card>
-    </div>
+    <MudCard @onclick="@(()=>_nav.NavigateTo("/homesteads/" + @hs.Id))" Class="homestead-card">
+        <MudCardContent>
+            <MudText>@hs.Name</MudText>
+        </MudCardContent>
+    </MudCard>
 
 }
 
 <form @onsubmit="AddHomestead">
-    <input placeholder="Homestead Name" @bind="newHomesteadName" />
-    <button>Add Homestead</button>
+    <MudTextField T="string" Label="Homestead Name" @bind-value="newHomesteadName"></MudTextField>
 </form>
 
 @code {
-    private string? newHomesteadName;
+    public string? newHomesteadName;
     private List<Homestead> homesteads = new();
 
 

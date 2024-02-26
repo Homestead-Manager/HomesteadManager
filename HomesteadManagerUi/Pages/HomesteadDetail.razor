@@ -1,11 +1,13 @@
 ﻿@page "/homesteads/{id}"
-
+@inject HttpClient Http
 <PageTitle>Home</PageTitle>
 
 <h1>@homestead.Name</h1>
 
 @code {
     [Parameter]
-    public string? id {get; set; }
-    private Homestead homestead = new Homestead { Name = "Haven Farm", Id = Guid.NewGuid().ToString() };
+    public string? id { get; set; }
+    public Homestead? homestead = new();
+    protected override async Task OnInitializedAsync() =>
+        homestead = await Http.GetFromJsonAsync<Homestead>("api/Homestead/" + id);
 }

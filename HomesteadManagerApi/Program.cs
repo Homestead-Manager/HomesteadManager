@@ -10,6 +10,9 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<HomesteadContext>(opt =>
     opt.UseInMemoryDatabase("Homestead"));
 
+builder.Services.AddDbContext<PlantContext>(opt =>
+    opt.UseInMemoryDatabase("Plant"));
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
