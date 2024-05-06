@@ -24,7 +24,7 @@ public class OpenAIService : IOpenAIService
 
     private void InitializeClient()
     {
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _config.Value.ApiKey);
+        _httpClient.DefaultRequestHeaders.Add("api-key", _config.Value.ApiKey);
         _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
     }
 
@@ -55,7 +55,9 @@ public class OpenAIService : IOpenAIService
 
         try
         {
-            var response = await _httpClient.PostAsync(_config.Value.EndpointUrl, httpContent);
+            var url = new Uri(_config.Value.EndpointUrl);
+            var endpoint = new Uri(url, "/openai/deployments/ai-farmersonly-gpt35/chat/completions?api-version=2024-02-15-preview");
+            var response = await _httpClient.PostAsync(endpoint.AbsoluteUri, httpContent);
 
             if (!response.IsSuccessStatusCode)
             {
