@@ -1,14 +1,13 @@
-﻿@inherits LayoutComponentBase
+@inherits LayoutComponentBase
 
-
-<MudThemeProvider />
+<MudThemeProvider Theme="CustomTheme" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
 <MudLayout>
     <MudAppBar>
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start"
-            OnClick="@((e) => DrawerToggle())" />
+                       OnClick="@((e) => DrawerToggle())" />
 
         Homestead Manager
     </MudAppBar>
@@ -28,23 +27,22 @@
 @code {
     bool _drawerOpen = true;
 
+    MudTheme CustomTheme = new MudTheme()
+        {
+            Palette = new PaletteLight()
+            {
+                Primary = "#5E8C61",
+                Secondary = "#F2E391",
 
+                Background = "#EFF0EB",
 
-
-
-
+                AppbarBackground = "#7A9A95",
+                Warning = "#E57F84"
+            },
+        };
 
     void DrawerToggle()
-
-
-
     {
-
-
-
         _drawerOpen = !_drawerOpen;
-
-
-
     }
 }
