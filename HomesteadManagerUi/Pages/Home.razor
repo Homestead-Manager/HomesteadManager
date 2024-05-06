@@ -7,6 +7,7 @@
         width: 18rem;
         margin-bottom: 10px;
     }
+
     .homestead-card:hover {
         background-color: gray;
     }
@@ -35,8 +36,8 @@
 
 
     protected override async Task OnInitializedAsync() =>
-        homesteads = await Http.GetFromJsonAsync<List<Homestead>>("api/Homestead") ?? [];
-            
+    homesteads = await Http.GetFromJsonAsync<List<Homestead>>("api/Homestead") ?? [];
+
     private void AddHomestead()
     {
         if (!string.IsNullOrWhiteSpace(newHomesteadName))

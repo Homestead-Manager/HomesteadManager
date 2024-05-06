@@ -1,8 +1,8 @@
-﻿namespace HomesteadManagerApi.Models
+namespace HomesteadManagerApi.Models
 {
-	public class OpenAIConfig
-	{
-		public string EndpointUrl { get; set; }
-		public string ApiKey { get; set; }
-	}
+    public class OpenAIConfig
+    {
+        public string EndpointUrl { get; set; }
+        public string ApiKey { get; set; }
+    }
 }

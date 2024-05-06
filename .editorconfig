@@ -1,16 +1,25 @@
-# .editorconfig
+# EditorConfig is awesome: https://EditorConfig.org
+
+# top-most EditorConfig file
 root = true
 
+# Don't use tabs for indentation.
 [*]
 indent_style = space
 indent_size = 4
-end_of_line = lf
+end_of_line = crlf
 charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
 
 [*.cs]
-dotnet_style_qualification_for_field = false:suggestion
-dotnet_style_qualification_for_property = false:suggestion
-dotnet_style_qualification_for_method = false:suggestion
-dotnet_style_qualification_for_event = false:suggestion
+# C# files settings
+indent_size = 4
+
+[*.cshtml]
+# Razor view settings
+indent_size = 4
+
+[*.razor]
+# Razor component settings for Blazor
+indent_size = 4
