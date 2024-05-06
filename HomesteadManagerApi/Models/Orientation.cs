@@ -3,9 +3,8 @@ using System.Text.Json.Serialization;
 namespace HomesteadManagerApi.Models;
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
-public enum SunPreference
+public enum Orientation
 {
-    FullSun,
-    PartialSun,
-    FullShade
+    NorthSouth,
+    EastWest
 }

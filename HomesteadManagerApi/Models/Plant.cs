@@ -1,15 +1,17 @@
-namespace HomesteadManagerApi.Models;
+using System.Collections.Generic;
 
-public class Plant
+namespace HomesteadManagerApi.Models
 {
-    public long? Id { get; set; }
-    public string? Name { get; set; }
-    public bool Annual { get; set; }
-    public bool IndoorSow { get; set; }
-    public float? PlantingSize { get; set; }
-    public float? PlantingDepth { get; set; }
-    public SunPreference? SunPreference { get; set; }
-    public Season? SowingSeason { get; set; }
-    public Plant[] CompanionPlants { get; set; } = [];
-    public Plant[] SuccessionPlants { get; set; } = [];
+    public class Plant
+    {
+        public int PlantID { get; set; }
+        public string CommonName { get; set; }
+        public string ScientificName { get; set; }
+        public string PlantType { get; set; } // Consider using Enum for PlantType.
+        public SunRequirement SunRequirement { get; set; }
+        public string WateringRequirement { get; set; }
+        
+        // Navigation properties
+        public ICollection<BedPlant> BedPlants { get; set; } = new List<BedPlant>();
+    }
 }
