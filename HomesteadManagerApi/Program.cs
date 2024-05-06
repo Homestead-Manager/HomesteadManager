@@ -8,7 +8,12 @@ using Microsoft.Net.Http.Headers;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.Configure<OpenAIConfig>(options => builder.Configuration.GetValue<OpenAIConfig>("OpenAIConfig"));
+builder.Configuration.AddJsonFile("appsettings.Development.json",
+    optional: true,
+    reloadOnChange: true);
+
+builder.Services.Configure<OpenAIConfig>(options => builder.Configuration.GetSection("OpenAIConfig").Bind(options));
+builder.Configuration.AddEnvironmentVariables();
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<HomesteadContext>(opt =>
