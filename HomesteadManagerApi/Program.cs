@@ -10,10 +10,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<HomesteadContext>(opt =>
-	opt.UseInMemoryDatabase("Homestead"));
+    opt.UseInMemoryDatabase("Homestead"));
 
 builder.Services.AddDbContext<PlantContext>(opt =>
-	opt.UseInMemoryDatabase("Plant"));
+    opt.UseInMemoryDatabase("Plant"));
 
 builder.Services.AddScoped<IOpenAIService, OpenAIService>();
 
@@ -26,17 +26,17 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-	app.UseSwagger();
-	app.UseSwaggerUI();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 app.UseCors(policy =>
-	policy.WithOrigins("http://localhost:5204")
-	.AllowAnyMethod()
-	.WithHeaders(HeaderNames.ContentType));
+    policy.WithOrigins("http://localhost:5204")
+    .AllowAnyMethod()
+    .WithHeaders(HeaderNames.ContentType));
 app.MapControllers();
 
 app.Run();
