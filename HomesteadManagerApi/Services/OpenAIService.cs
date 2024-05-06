@@ -1,5 +1,6 @@
 using HomesteadManagerApi.Interfaces;
 using HomesteadManagerApi.Models;
+using HomesteadManagerApi.Models.OpenAi;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
@@ -11,6 +12,8 @@ public class OpenAIService : IOpenAIService
 {
     private readonly HttpClient _httpClient;
     private readonly IOptions<OpenAIConfig> _config;
+    private static readonly string _model = "ai-farmersonly-gpt35";
+    private static readonly string _systemPrompt = "You are an AI assistant that helps people find information about homesteading. Respond in JSON.";
 
     public OpenAIService(IOptions<OpenAIConfig> config, HttpClient httpClient)
     {
@@ -21,16 +24,29 @@ public class OpenAIService : IOpenAIService
 
     private void InitializeClient()
     {
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _config.Value.ApiKey);
+        _httpClient.DefaultRequestHeaders.Add("api-key", _config.Value.ApiKey);
         _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
     }
 
-    public async Task<string> CallEndpointAsync(string prompt, string model)
+    public async Task<string> CallEndpointAsync(string prompt)
     {
-        var requestBody = new
+        var messages = new List<Prompt>
         {
-            prompt = prompt,
-            model = model,
+            new Prompt
+            {
+                Role = PromptType.System,
+                Content = _systemPrompt
+            },
+            new Prompt
+            {
+                Role = PromptType.User,
+                Content = prompt
+            }
+        };
+        var requestBody = new Request
+        {
+            Messages = messages,
+            Model = _model,
             // Add additional parameters here if needed (e.g., temperature, max_tokens, etc.)
         };
 
@@ -39,7 +55,9 @@ public class OpenAIService : IOpenAIService
 
         try
         {
-            var response = await _httpClient.PostAsync(_config.Value.EndpointUrl, httpContent);
+            var url = new Uri(_config.Value.EndpointUrl);
+            var endpoint = new Uri(url, "/openai/deployments/ai-farmersonly-gpt35/chat/completions?api-version=2024-02-15-preview");
+            var response = await _httpClient.PostAsync(endpoint.AbsoluteUri, httpContent);
 
             if (!response.IsSuccessStatusCode)
             {
