@@ -1,5 +1,6 @@
 using HomesteadManagerApi.Data;
 using HomesteadManagerApi.Interfaces;
+using HomesteadManagerApi.Models;
 using HomesteadManagerApi.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
@@ -7,6 +8,7 @@ using Microsoft.Net.Http.Headers;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.Configure<OpenAIConfig>(options => builder.Configuration.GetValue<OpenAIConfig>("OpenAIConfig"));
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<HomesteadContext>(opt =>
@@ -15,7 +17,9 @@ builder.Services.AddDbContext<HomesteadContext>(opt =>
 builder.Services.AddDbContext<PlantContext>(opt =>
     opt.UseInMemoryDatabase("Plant"));
 
-builder.Services.AddScoped<IOpenAIService, OpenAIService>();
+builder.Services.AddHttpClient<OpenAIService>();
+
+builder.Services.AddSingleton<IOpenAIService, OpenAIService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
