@@ -18,15 +18,11 @@
             <MudText Typo="Typo.h6" Class="mb-4"></MudText>
         </MudDropZone>
         @for (int r = 0; r < 8; r++)
-
         {
-
             var row = r.ToString();
             <div class="d-flex">
                 @for (int c = 0; c < 8; c++)
-
                 {
-
                     var col = c.ToString();
                     <MudDropZone T="DropItem" Identifier="@($"{row}{col}")" DraggingClass="mud-theme-success"
                         Class="d-flex justify-center align-center border-2 border-solid docs-gray-bg mud-border-lines-default"
