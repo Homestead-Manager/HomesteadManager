@@ -4,3 +4,92 @@
 <PageTitle>Plants</PageTitle>
 
 <h1>Plants</h1>
+
+
+<MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="AddPlant" >Add Plant</MudButton>
+
+<MudDropContainer T="DropItem" Items="_items" CanDropClass="mud-border-info" NoDropClass="mud-border-error" CanDrop="@( (item,identifier ) => _items.Count(x => x.Identifier == identifier ) == 0)" ItemsSelector="@((item,dropzone) => item.Identifier == dropzone)" ItemDropped="ItemUpdated" Class="border-2 border-solid mud-border-lines-default">
+    <ChildContent>
+        <MudDropZone T="DropItem" Identifier='New Plant' DraggingClass="mud-theme-success" Class="d-flex justify-center align-center border-2 border-solid docs-gray-bg mud-border-lines-default" Style="height:64px;width:64px;">
+            <MudText Typo="Typo.h6" Class="mb-4"></MudText>
+        </MudDropZone>
+        @for(int r = 0; r < 8; r++)
+        {
+            var row = r.ToString();
+            <div class="d-flex">
+                @for (int c = 0; c < 8; c++)
+                {
+                    var col = c.ToString();
+                    <MudDropZone T="DropItem" Identifier="@($"{row}{col}")" DraggingClass="mud-theme-success" Class="d-flex justify-center align-center border-2 border-solid docs-gray-bg mud-border-lines-default" Style="height:64px;width:64px;"/>
+                }
+            </div>
+        }
+    </ChildContent>
+    <ItemRenderer>
+        <div class="d-flex justify-center align-center flex-grow-1">
+            <MudTooltip Text="@(context.Tooltip)">
+                <MudText Typo="Typo.h3"> @(Char.ConvertFromUtf32(Convert.ToInt32(context.Icon, 16)))</MudText>
+            </MudTooltip>
+        </div>
+    </ItemRenderer>
+</MudDropContainer>
+
+@code {
+    private void ItemUpdated(MudItemDropInfo<DropItem> dropItem)
+    {
+        dropItem.Item.Identifier = dropItem.DropzoneIdentifier;
+    }
+
+private List<DropItem> _items = new()
+{
+    new DropItem(){ Icon = "1F345", Tooltip="Tomato", Identifier = "00" },
+    new DropItem(){ Icon = "1F346", Tooltip="Eggplant", Identifier = "01" },
+    new DropItem(){ Icon = "1F954", Tooltip="Potato", Identifier = "02" },
+    new DropItem(){ Icon = "1F955", Tooltip="Carrot", Identifier = "03" },
+    new DropItem(){ Icon = "1F345", Tooltip="Tomato", Identifier = "04" },
+    new DropItem(){ Icon = "1F346", Tooltip="Eggplant", Identifier = "05" },
+    new DropItem(){ Icon = "1F954", Tooltip="Potato", Identifier = "06" },
+    new DropItem(){ Icon = "1F955", Tooltip="Carrot", Identifier = "07" },
+    new DropItem(){ Icon = "1F345", Tooltip="Tomato", Identifier = "10" },
+    new DropItem(){ Icon = "1F346", Tooltip="Eggplant", Identifier = "11" },
+    new DropItem(){ Icon = "1F954", Tooltip="Potato", Identifier = "12" },
+    new DropItem(){ Icon = "1F955", Tooltip="Carrot", Identifier = "13" },
+    new DropItem(){ Icon = "1F345", Tooltip="Tomato", Identifier = "14" },
+    new DropItem(){ Icon = "1F346", Tooltip="Eggplant", Identifier = "15" },
+    new DropItem(){ Icon = "1F954", Tooltip="Potato", Identifier = "16" },
+    new DropItem(){ Icon = "1F955", Tooltip="Carrot", Identifier = "17" },
+    
+    new DropItem(){ Icon = "1F345", Tooltip="Tomato", Identifier = "60" },
+    new DropItem(){ Icon = "1F346", Tooltip="Eggplant", Identifier = "61" },
+    new DropItem(){ Icon = "1F954", Tooltip="Potato", Identifier = "62" },
+    new DropItem(){ Icon = "1F955", Tooltip="Carrot", Identifier = "63" },
+    new DropItem(){ Icon = "1F345", Tooltip="Tomato", Identifier = "64" },
+    new DropItem(){ Icon = "1F346", Tooltip="Eggplant", Identifier = "65" },
+    new DropItem(){ Icon = "1F954", Tooltip="Potato", Identifier = "66" },
+    new DropItem(){ Icon = "1F955", Tooltip="Carrot", Identifier = "67" },
+    new DropItem(){ Icon = "1F345", Tooltip="Tomato", Identifier = "70" },
+    new DropItem(){ Icon = "1F346", Tooltip="Eggplant", Identifier = "71" },
+    new DropItem(){ Icon = "1F954", Tooltip="Potato", Identifier = "72" },
+    new DropItem(){ Icon = "1F955", Tooltip="Carrot", Identifier = "73" },
+    new DropItem(){ Icon = "1F345", Tooltip="Tomato", Identifier = "74" },
+    new DropItem(){ Icon = "1F346", Tooltip="Eggplant", Identifier = "75" },
+    new DropItem(){ Icon = "1F954", Tooltip="Potato", Identifier = "76" },
+    new DropItem(){ Icon = "1F955", Tooltip="Carrot", Identifier = "77" },
+};
+
+    private void AddPlant(){
+       if(!_items.Any(item => item.Identifier.Equals("New Plant")))
+        {
+        _items.Add(new DropItem(){ Icon = "1F96C", Tooltip = "Lettuce", Identifier = "New Plant" });
+        }
+    }
+
+    public class DropItem
+    {
+        public string Icon { get; init; }
+        public string Tooltip { get; init; }
+        public string Identifier { get; set; }
+    }
+}
+
+
