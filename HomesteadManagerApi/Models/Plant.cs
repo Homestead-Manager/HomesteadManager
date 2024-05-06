@@ -10,7 +10,7 @@ namespace HomesteadManagerApi.Models
         public string PlantType { get; set; } // Consider using Enum for PlantType.
         public SunRequirement SunRequirement { get; set; }
         public string WateringRequirement { get; set; }
-        
+
         // Navigation properties
         public ICollection<BedPlant> BedPlants { get; set; } = new List<BedPlant>();
     }

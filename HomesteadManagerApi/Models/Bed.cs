@@ -8,7 +8,7 @@ namespace HomesteadManagerApi.Models
         public int GardenID { get; set; }
         public decimal Size { get; set; }
         public Orientation Orientation { get; set; }
-        
+
         // Navigation properties
         public Garden Garden { get; set; }
         public ICollection<BedSoilType> BedSoilTypes { get; set; } = new List<BedSoilType>();

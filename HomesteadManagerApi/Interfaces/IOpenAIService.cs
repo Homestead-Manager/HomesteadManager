@@ -1,6 +1,6 @@
 namespace HomesteadManagerApi.Interfaces;
 
-public interface IOpenAIService 
+public interface IOpenAIService
 {
 
 }
