@@ -3,7 +3,7 @@ namespace HomesteadManagerApi.Data;
 using Microsoft.EntityFrameworkCore;
 using HomesteadManagerApi.Models;
 
-public class HomesteadContext: DbContext
+public class HomesteadContext : DbContext
 {
     public HomesteadContext(DbContextOptions<HomesteadContext> options) : base(options)
     {

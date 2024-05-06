@@ -11,12 +11,10 @@ _site/
 *.user
 *.userosscache
 *.sln.docstates
-.vscode/
-!.vscode/extensions.json
-!.vscode/settings.json
 *.userprefs
 
 # Build results
+HomesteadManagerUi/wwwroot/css/app.min.css
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
@@ -27,6 +25,7 @@ build/
 bld/
 [Bb]in/
 [Oo]bj/
+.mono/
 
 # Visual Studo 2015 cache/options directory
 .vs/
@@ -125,7 +124,7 @@ publish/
 # Publish Web Output
 *.[Pp]ublish.xml
 *.azurePubxml
-# TODO: Comment the next line if you want to checkin your web deploy settings 
+# TODO: Comment the next line if you want to checkin your web deploy settings
 # but database connection strings (with potential passwords) will be unencrypted
 *.pubxml
 *.publishproj
@@ -195,8 +194,11 @@ FakesAssemblies/
 project.lock.json
 __pycache__/
 
-#Mac OSX 
+#Mac OSX
 .DS_Store
 
 # Windows thumbnail cache files
 Thumbs.db
+
+
+appsettings.Development.json
