@@ -13,7 +13,7 @@ public class OpenAIService : IOpenAIService
     private readonly HttpClient _httpClient;
     private readonly IOptions<OpenAIConfig> _config;
     private static readonly string _model = "ai-farmersonly-gpt35";
-    private static readonly string _systemPrompt = "You are an AI assistant that helps people find information about homesteading. Respond in JSON.";
+    private static readonly string _systemPrompt = "You are an AI assistant that helps people find information about homesteading. Respond in unformatted JSON.";
 
     public OpenAIService(IOptions<OpenAIConfig> config, HttpClient httpClient)
     {
