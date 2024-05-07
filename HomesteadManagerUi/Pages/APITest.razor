@@ -5,20 +5,20 @@
 
 <h3>APITest</h3>
 
-@if (String.IsNullOrEmpty(Message))
+@if (String.IsNullOrEmpty(message))
 {
     <p>Loading...</p>
 }
 else
 {
-    <p>@Message</p>
+    <p>@message</p>
 }
 
 @code {
-    private string Message;
+    private string message;
 
     protected override async Task OnInitializedAsync()
     {
-        Message = await api.GetHelloWorld();
+        message = await api.GetHelloWorld();
     }
 }
