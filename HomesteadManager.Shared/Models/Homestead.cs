@@ -1,4 +1,4 @@
-namespace HomesteadManagerApi.Models;
+namespace HomesteadManager.Shared.Models;
 
 public class Homestead
 {

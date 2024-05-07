@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 
-namespace HomesteadManagerApi.Models
-{
+namespace HomesteadManager.Shared.Models;
     public class Bed
     {
         public int BedID { get; set; }
@@ -15,4 +14,3 @@ namespace HomesteadManagerApi.Models
         public ICollection<BedGardenStructure> BedGardenStructures { get; set; } = new List<BedGardenStructure>();
         public ICollection<BedPlant> BedPlants { get; set; } = new List<BedPlant>();
     }
-}
