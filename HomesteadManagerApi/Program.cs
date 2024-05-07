@@ -22,6 +22,12 @@ builder.Services.AddDbContext<HomesteadContext>(opt =>
 builder.Services.AddDbContext<PlantContext>(opt =>
     opt.UseInMemoryDatabase("Plant"));
 
+builder.Services.AddDbContext<GardenContext>(opt =>
+    opt.UseInMemoryDatabase("Garden"));
+
+builder.Services.AddDbContext<BedContext>(opt =>
+    opt.UseInMemoryDatabase("Bed"));
+
 builder.Services.AddHttpClient<OpenAIService>();
 
 builder.Services.AddSingleton<IOpenAIService, OpenAIService>();
