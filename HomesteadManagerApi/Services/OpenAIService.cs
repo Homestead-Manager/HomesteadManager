@@ -26,6 +26,7 @@ public class OpenAIService : IOpenAIService
     {
         _httpClient.DefaultRequestHeaders.Add("api-key", _config.Value.ApiKey);
         _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        _httpClient.Timeout = TimeSpan.FromSeconds(1000);
     }
 
     public async Task<string> CallEndpointAsync(string prompt)
