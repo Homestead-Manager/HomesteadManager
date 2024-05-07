@@ -333,6 +333,21 @@
 {
     <div>
         <h1 class="wizard-header">Preparing the Soil for Success</h1>
+        <div class="wizard-text">
+            As we chart the course for your homestead's growth, we recognize that the journey is deeply personal and varied. Whether you're embarking on this path with a sprout of experience or with branches heavy with knowledge, your growth potential knows no bounds.
+
+            Let's explore the landscape of resources and tools at your disposal and understand the time you can devote to your field of dreams. This holistic view ensures that we are not just dreaming big, but also planting our feet firmly on the ground of reality.
+        </div>
+
+        <div class="wizard-selection-label">
+            Homesteading Experience Level
+        </div>
+
+        <MudRadioGroup T="ExperienceLevel?" @bind-Value="@SelectedExperienceLevel">
+            <MudRadio T="ExperienceLevel?" Value="ExperienceLevel.Beginner">Beginner</MudRadio>
+            <MudRadio T="ExperienceLevel?" Value="ExperienceLevel.Intermediate">Intermediate</MudRadio>
+            <MudRadio T="ExperienceLevel?" Value="ExperienceLevel.Advanced">Advanced</MudRadio>
+        </MudRadioGroup>
         <div class="wizard-next">
             <MudButton Variant="Variant.Filled" Color="@Color.Primary" OnClick="()=> Next()">Next</MudButton>
         </div>
@@ -393,8 +408,14 @@
     List<string> AvailableFinancialManagementTypes = new List<string> { "Budgeting and expense tracking", "Bartering and trading systems", "Income streams from homesteading", "Investing in homestead improvements" };
     List<string> SelectedFinancialManagementTypes = new List<string>();
 
-    protected override async Task OnInitializedAsync() =>
-        await Http.GetFromJsonAsync<List<HomesteadManager.Shared.Models.Homestead>>("api/Homestead");
+    enum ExperienceLevel
+    {
+        Beginner,
+        Intermediate,
+        Advanced
+    }
+
+    ExperienceLevel? SelectedExperienceLevel;
 
     enum WizardStep
     {
@@ -406,7 +427,7 @@
         Step6
     }
 
-    WizardStep currentStep = WizardStep.Step1;
+    WizardStep currentStep = WizardStep.Step5;
 
     string GetStepColor(WizardStep step)
     {
