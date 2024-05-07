@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy JAR app to Azure Web App - api-farmersonly-eus2
+name: Build and deploy ASP.Net Core app to Azure Web App - api-farmersonly-eus2
 
 on:
   push:
@@ -16,19 +16,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Java version
-        uses: actions/setup-java@v1
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
         with:
-          java-version: '8'
+          dotnet-version: '8.x'
+          include-prerelease: true
 
-      - name: Build with Maven
-        run: mvn clean install
+      - name: Build with dotnet
+        run: dotnet build --configuration Release
+
+      - name: dotnet publish
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
-          name: java-app
-          path: '${{ github.workspace }}/target/*.jar'
+          name: .net-app
+          path: ${{env.DOTNET_ROOT}}/myapp
 
   deploy:
     runs-on: ubuntu-latest
@@ -36,12 +40,12 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-      
+    
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
-          name: java-app
+          name: .net-app
       
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -49,5 +53,5 @@ jobs:
         with:
           app-name: 'api-farmersonly-eus2'
           slot-name: 'Production'
-          package: '*.jar'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_DAC5A4212C494ABD9BD8F3E926E2607A }}
+          package: .
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F619B8A5BF19408C814D39DCC5B72A9D }}
