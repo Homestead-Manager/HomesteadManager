@@ -1,14 +1,23 @@
 @page "/plants"
+@using System.Text.RegularExpressions
 @inject HttpClient Http
 
 <PageTitle>Plants</PageTitle>
 
 <h1>Plants</h1>
 
-<MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="AddPlant">Add Plant</MudButton>
+<MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick='(() => AddPlant("BeegDaddyLettuce"))'>Add Beeg Daddy
+    Lettuce
+</MudButton>
+
+<MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick='(() => AddPlant("TomatoLine"))'>Add Line of Tomatos
+</MudButton>
+
+<MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick='(() => AddPlant("Eggplant"))'>Add Eggplant
+</MudButton>
 
 <MudDropContainer T="DropItem" Items="_items" CanDropClass="mud-border-info" NoDropClass="mud-border-error"
-    CanDrop="@( (item,identifier ) => _items.Count(x => x.Identifier == identifier ) == 0)"
+    CanDrop="@( (item,identifier ) => customCanDrop(item,identifier))"
     ItemsSelector="@((item,dropzone) => item.Identifier == dropzone)" ItemDropped="ItemUpdated"
     Class="border-2 border-solid mud-border-lines-default">
     <ChildContent>
@@ -42,69 +51,346 @@
 
 @code
 {
-    private void ItemUpdated(MudItemDropInfo<DropItem> dropItem)
+
+    private Boolean customCanDrop(DropItem item, string identifier)
     {
 
+        if (checkIfIdentifierExists(identifier) == true && item.Link.ToString() == "00000000-0000-0000-0000-000000000000")
+        {
+            return false;
+        }
+
+        if (checkLinkedPlantsValidPosition(item, identifier) == false)
+        {
+            return false;
+        }
+        return true;
+
+    }
+
+    private Boolean checkIfIdentifierExists(string identifier)
+    {
+        if (_items.Count(x => x.Identifier == identifier) != 0)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private Boolean checkLinkedPlantsValidPosition(DropItem item, string identifier)
+    {
+        if (item.Link.ToString() != "00000000-0000-0000-0000-000000000000")
+        {
+            var linkedPlant = _items.Find(x => x.Link.Equals(item.Id));
+            var loopCounter = 1;
+            List<string> linkedOriginalPositionList = new List<string>();
+            List<string> linkedNewPositionList = new List<string>();
+            linkedOriginalPositionList.Add(item.Identifier);
+
+            while (linkedPlant != null && loopCounter <= 3)
+            {
+                linkedOriginalPositionList.Add(linkedPlant.Identifier);
+                if (checkIfPositionOutOfBounds(identifier))
+                {
+                    return false;
+                }
+                var linkedPosition = getNewLinkedPosition(identifier, linkedPlant);
+                linkedNewPositionList.Add(linkedPosition);
+
+                Console.Write("Original. Position: ");
+                Console.WriteLine(linkedPlant.Identifier);
+                Console.Write("Linked Position: ");
+                Console.WriteLine(linkedPosition);
+
+                var tempLinkedPlant = linkedPlant;
+
+                linkedPlant = _items.Find(x => x.Link.Equals(linkedPlant.Id));
+
+                identifier = linkedPosition;
+
+                loopCounter++;
+            }
+
+            foreach (string position in linkedNewPositionList)
+            {
+                Boolean identifierExists = checkIfIdentifierExists(position);
+
+                Boolean positionInLinkedPositionList = linkedOriginalPositionList.Contains(position);
+
+                Boolean isPositionOutOfBounds = checkIfPositionOutOfBounds(position);
+
+                if (identifierExists == true && positionInLinkedPositionList == false || isPositionOutOfBounds == true)
+                {
+                    return false;
+                }
+            };
+        }
+
+        return true;
+    }
+
+    private Boolean checkIfPositionOutOfBounds(String position)
+    {
+
+        Console.Write("Reg position: ");
+        Console.WriteLine(position);
+        string pattern = @"^[0-9]{2}$";
+        // Create a Regex
+        Regex re = new Regex(pattern);
+
+        Console.WriteLine(re.IsMatch(position));
+        if (re.IsMatch(position) == true && Int32.Parse(position) <= 77 && Int32.Parse(position[1].ToString()) <= 7)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    private void ItemUpdated(MudItemDropInfo<DropItem> dropItem)
+    {
         dropItem.Item.Identifier = dropItem.DropzoneIdentifier;
+
+        if (dropItem.Item.Link.ToString() != "00000000-0000-0000-0000-000000000000")
+        {
+            setLinkedPlants(dropItem);
+        }
+
+    }
+
+    private void setLinkedPlants(MudItemDropInfo<DropItem> dropItem)
+    {
+
+        var originalPlant = _items.Find(x => x.Id.Equals(dropItem.Item.Id));
+
+        var linkedPlant = _items.Find(x => x.Link.Equals(dropItem.Item.Id));
+        var loopCounter = 1;
+
+        while (linkedPlant != null && loopCounter <= 3)
+        {
+            linkedPlant.Identifier = getNewLinkedPosition(originalPlant.Identifier, linkedPlant);
+            var tempLinkedPlant = linkedPlant; linkedPlant = _items.Find(x =>
+            x.Link.Equals(linkedPlant.Id));
+
+            originalPlant = tempLinkedPlant;
+
+            loopCounter++;
+        }
+
+    }
+
+    private string getNewLinkedPosition(String originalPlantIdentifier, DropItem linkedPlant)
+    {
+
+        if (linkedPlant.LinkPosition.Equals("Down"))
+        {
+            Console.WriteLine("Down");
+
+            int newColumnNumber = Int32.Parse(originalPlantIdentifier[0].ToString()) + 1;
+
+            Console.Write("Output: ");
+            Console.WriteLine(newColumnNumber.ToString() + originalPlantIdentifier[1]);
+
+            return newColumnNumber.ToString() + originalPlantIdentifier[1];
+        }
+
+        if (linkedPlant.LinkPosition.Equals("Right"))
+        {
+            Console.WriteLine("Right");
+            int newRowNumber = Int32.Parse(originalPlantIdentifier[1].ToString()) + 1;
+
+            return originalPlantIdentifier[0] + newRowNumber.ToString();
+        }
+
+        if (linkedPlant.LinkPosition.Equals("Up"))
+        {
+            Console.WriteLine("Up");
+            int newColumnNumber = Int32.Parse(originalPlantIdentifier[0].ToString()) - 1;
+
+            Console.Write("Output: ");
+            Console.WriteLine(newColumnNumber.ToString() + originalPlantIdentifier[1]);
+            return newColumnNumber.ToString() + originalPlantIdentifier[1];
+        }
+
+        if (linkedPlant.LinkPosition.Equals("Left"))
+        {
+            Console.WriteLine("Left");
+            int newRowNumber = Int32.Parse(originalPlantIdentifier[1].ToString()) - 1;
+
+            return originalPlantIdentifier[0] + newRowNumber.ToString();
+        }
+
+        return null;
 
     }
 
     private List<DropItem> _items = new()
-    {
-        new DropItem(){ Icon = "1F345", Tooltip="Tomato", Identifier = "00" },
-        new DropItem(){ Icon = "1F346", Tooltip="Eggplant", Identifier = "01" },
-        new DropItem(){ Icon = "1F954", Tooltip="Potato", Identifier = "02" },
-        new DropItem(){ Icon = "1F955", Tooltip="Carrot", Identifier = "03" },
-        new DropItem(){ Icon = "1F345", Tooltip="Tomato", Identifier = "04" },
-        new DropItem(){ Icon = "1F346", Tooltip="Eggplant", Identifier = "05" },
-        new DropItem(){ Icon = "1F954", Tooltip="Potato", Identifier = "06" },
-        new DropItem(){ Icon = "1F955", Tooltip="Carrot", Identifier = "07" },
-        new DropItem(){ Icon = "1F345", Tooltip="Tomato", Identifier = "10" },
-        new DropItem(){ Icon = "1F346", Tooltip="Eggplant", Identifier = "11" },
-        new DropItem(){ Icon = "1F954", Tooltip="Potato", Identifier = "12" },
-        new DropItem(){ Icon = "1F955", Tooltip="Carrot", Identifier = "13" },
-        new DropItem(){ Icon = "1F345", Tooltip="Tomato", Identifier = "14" },
-        new DropItem(){ Icon = "1F346", Tooltip="Eggplant", Identifier = "15" },
-        new DropItem(){ Icon = "1F954", Tooltip="Potato", Identifier = "16" },
-        new DropItem(){ Icon = "1F955", Tooltip="Carrot", Identifier = "17" },
+{
+new DropItem(){ Icon = "1F345", Tooltip="Tomato", Identifier = "00" },
+new DropItem(){ Icon = "1F346", Tooltip="Eggplant", Identifier = "01" },
+new DropItem(){ Icon = "1F954", Tooltip="Potato", Identifier = "02" },
+new DropItem(){ Icon = "1F955", Tooltip="Carrot", Identifier = "03" },
+new DropItem(){ Icon = "1F345", Tooltip="Tomato", Identifier = "04" },
+new DropItem(){ Icon = "1F346", Tooltip="Eggplant", Identifier = "05" },
+new DropItem(){ Icon = "1F954", Tooltip="Potato", Identifier = "06" },
+new DropItem(){ Icon = "1F955", Tooltip="Carrot", Identifier = "07" },
+new DropItem(){ Icon = "1F345", Tooltip="Tomato", Identifier = "10" },
+new DropItem(){ Icon = "1F346", Tooltip="Eggplant", Identifier = "11" },
+new DropItem(){ Icon = "1F954", Tooltip="Potato", Identifier = "12" },
+new DropItem(){ Icon = "1F955", Tooltip="Carrot", Identifier = "13" },
+new DropItem(){ Icon = "1F345", Tooltip="Tomato", Identifier = "14" },
+new DropItem(){ Icon = "1F346", Tooltip="Eggplant", Identifier = "15" },
+new DropItem(){ Icon = "1F954", Tooltip="Potato", Identifier = "16" },
+new DropItem(){ Icon = "1F955", Tooltip="Carrot", Identifier = "17" },
 
-        new DropItem(){ Icon = "1F345", Tooltip="Tomato", Identifier = "60" },
-        new DropItem(){ Icon = "1F346", Tooltip="Eggplant", Identifier = "61" },
-        new DropItem(){ Icon = "1F954", Tooltip="Potato", Identifier = "62" },
-        new DropItem(){ Icon = "1F955", Tooltip="Carrot", Identifier = "63" },
-        new DropItem(){ Icon = "1F345", Tooltip="Tomato", Identifier = "64" },
-        new DropItem(){ Icon = "1F346", Tooltip="Eggplant", Identifier = "65" },
-        new DropItem(){ Icon = "1F954", Tooltip="Potato", Identifier = "66" },
-        new DropItem(){ Icon = "1F955", Tooltip="Carrot", Identifier = "67" },
-        new DropItem(){ Icon = "1F345", Tooltip="Tomato", Identifier = "70" },
-        new DropItem(){ Icon = "1F346", Tooltip="Eggplant", Identifier = "71" },
-        new DropItem(){ Icon = "1F954", Tooltip="Potato", Identifier = "72" },
-        new DropItem(){ Icon = "1F955", Tooltip="Carrot", Identifier = "73" },
-        new DropItem(){ Icon = "1F345", Tooltip="Tomato", Identifier = "74" },
-        new DropItem(){ Icon = "1F346", Tooltip="Eggplant", Identifier = "75" },
-        new DropItem(){ Icon = "1F954", Tooltip="Potato", Identifier = "76" },
-        new DropItem(){ Icon = "1F955", Tooltip="Carrot", Identifier = "77" },
-    };
+new DropItem(){ Icon = "1F345", Tooltip="Tomato", Identifier = "60" },
+new DropItem(){ Icon = "1F346", Tooltip="Eggplant", Identifier = "61" },
+new DropItem(){ Icon = "1F954", Tooltip="Potato", Identifier = "62" },
+new DropItem(){ Icon = "1F955", Tooltip="Carrot", Identifier = "63" },
+new DropItem(){ Icon = "1F345", Tooltip="Tomato", Identifier = "64" },
+new DropItem(){ Icon = "1F346", Tooltip="Eggplant", Identifier = "65" },
+new DropItem(){ Icon = "1F954", Tooltip="Potato", Identifier = "66" },
+new DropItem(){ Icon = "1F955", Tooltip="Carrot", Identifier = "67" },
+new DropItem(){ Icon = "1F345", Tooltip="Tomato", Identifier = "70" },
+new DropItem(){ Icon = "1F346", Tooltip="Eggplant", Identifier = "71" },
+new DropItem(){ Icon = "1F954", Tooltip="Potato", Identifier = "72" },
+new DropItem(){ Icon = "1F955", Tooltip="Carrot", Identifier = "73" },
+new DropItem(){ Icon = "1F345", Tooltip="Tomato", Identifier = "74" },
+new DropItem(){ Icon = "1F346", Tooltip="Eggplant", Identifier = "75" },
+new DropItem(){ Icon = "1F954", Tooltip="Potato", Identifier = "76" },
+new DropItem(){ Icon = "1F955", Tooltip="Carrot", Identifier = "77" },
+};
 
-    private void AddPlant()
+    private void AddPlant(string name)
 
     {
         if (!_items.Any(item => item.Identifier.Equals("New Plant")))
         {
-
-            _items.Add(new DropItem() { Icon = "1F96C", Tooltip = "Lettuce", Identifier = "New Plant" });
-
+            createNewPlant(name);
         }
+    }
+
+    private void createNewPlant(string name)
+    {
+        if (name.Equals("TomatoLine"))
+        {
+            createLineTomatos();
+        }
+        if (name.Equals("BeegDaddyLettuce"))
+        {
+            createBeegDaddyLettuce();
+        }
+
+        if (name.Equals("Eggplant"))
+        {
+            createEggplant();
+        }
+    }
+
+    private void createEggplant()
+    {
+        _items.Add(new DropItem() { Icon = "1F346", Tooltip = "Eggplant", Identifier = "New Plant" });
+    }
+
+    private void createLineTomatos()
+    {
+        _items.Add(new DropItem()
+            {
+                Id = Guid.NewGuid(),
+                Icon = "1F345",
+                Tooltip = "Tomato",
+                Identifier = "New Plant",
+                LinkPosition = "Left"
+            });
+
+        var firstPlant = _items.Find(x => x.Identifier.Equals("New Plant"));
+
+        _items.Add(new DropItem()
+            {
+                Id = Guid.NewGuid(),
+                Icon = "1F345",
+                Tooltip = "Tomato",
+                Identifier = "New Plant",
+                Link = firstPlant.Id,
+                LinkPosition = "Right"
+            });
+
+        var secondPlant = _items.Find(x => x.Link.Equals(firstPlant.Id));
+        firstPlant.Link = secondPlant.Id;
+    }
+
+    private void createBeegDaddyLettuce()
+    {
+        _items.Add(new DropItem()
+            {
+                Id = Guid.NewGuid(),
+                Icon = "1F96C",
+                Tooltip = "Lettuce",
+                Identifier = "New Plant",
+                LinkPosition = "Down"
+            });
+
+        var firstPlant = _items.Find(x => x.Identifier.Equals("New Plant"));
+
+        _items.Add(new DropItem()
+            {
+                Id = Guid.NewGuid(),
+                Icon = "1F96C",
+                Tooltip = "Lettuce",
+                Identifier = "New Plant",
+                Link = firstPlant.Id,
+                LinkPosition = "Right"
+            });
+
+        var secondPlant = _items.Find(x => x.Link.Equals(firstPlant.Id));
+
+        //firstPlant.Link = secondPlant.Id;
+
+        _items.Add(new DropItem()
+            {
+                Id = Guid.NewGuid(),
+                Icon = "1F96C",
+                Tooltip = "Lettuce",
+                Identifier = "New Plant",
+                Link = secondPlant.Id,
+                LinkPosition = "Up"
+            });
+
+        var thirdPlant = _items.Find(x => x.Link.Equals(secondPlant.Id));
+
+        //thirdPlant.Link = secondPlant.Id;
+
+        _items.Add(new DropItem()
+            {
+                Id = Guid.NewGuid(),
+                Icon = "1F96C",
+                Tooltip = "Lettuce",
+                Identifier = "New Plant",
+                Link = thirdPlant.Id,
+                LinkPosition = "Left"
+            });
+
+        var fourthPlant = _items.Find(x => x.Link.Equals(thirdPlant.Id));
+
+        //fourthPlant.Link = thirdPlant.Id;
+        firstPlant.Link = fourthPlant.Id;
     }
 
     public class DropItem
     {
+        public Guid Id { get; set; }
 
         public string Icon { get; init; }
 
         public string Tooltip { get; init; }
 
         public string Identifier { get; set; }
+
+        public Guid Link { get; set; }
+
+        public string LinkPosition { get; set; }
 
     }
 }
