@@ -1,0 +1,24 @@
+@page "/"
+@using HomesteadManagerUi.Services
+@inject NavigationManager _nav
+@inject ApiService api
+
+<h3>APITest</h3>
+
+@if (String.IsNullOrEmpty(Message))
+{
+    <p>Loading...</p>
+}
+else
+{
+    <p>@Message</p>
+}
+
+@code {
+    private string Message;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Message = await api.GetHelloWorld();
+    }
+}

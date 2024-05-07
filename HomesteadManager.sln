@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomesteadManagerUi", "Homes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomesteadManagerUiTest", "HomesteadManagerUiTest\HomesteadManagerUiTest.csproj", "{95970939-6249-4828-9B2E-4DFD750ED216}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomesteadManager.Shared", "HomesteadManager.Shared\HomesteadManager.Shared.csproj", "{84CBA0EB-0D2A-4568-8F21-5CD47B89BE1C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomesteadManager.Shared", "HomesteadManager.Shared\HomesteadManager.Shared.csproj", "{84CBA0EB-0D2A-4568-8F21-5CD47B89BE1C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
