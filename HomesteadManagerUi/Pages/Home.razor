@@ -31,6 +31,12 @@
         flex-direction: column;
     }
 
+    .step2-inputs {
+        margin-top: 32px;
+        display: flex;
+        flex-direction: column;
+    }
+
     .wizard-next {
     }
 </style>
@@ -102,15 +108,15 @@
 
         <div class="step1-inputs">
 
-            <MudInput T="String" FullWidth="false" Variant="Variant.Filled" Placeholder="Email" InputType="InputType.Email" />
-            <MudInput T="String" FullWidth="false" Variant="Variant.Filled" Placeholder="Password" InputType="InputType.Password" />
+            <MudInput T="String" Value="Email" ValueChanged="(value) => Email = value" FullWidth="false" Variant="Variant.Filled" Placeholder="Email" InputType="InputType.Email" />
+            <MudInput T="String" Value="Password" ValueChanged="(value) => Password = value " FullWidth="false" Variant="Variant.Filled" Placeholder="Password" InputType="InputType.Password" />
         </div>
         <div class="wizard-text">
             Ready to grow? Hit 'Next' to plant the seeds of your homestead's future.
         </div>
 
         <div class="wizard-next">
-            <MudButton Variant="Variant.Filled" OnClick="()=> Next()">Next</MudButton>
+            <MudButton Disabled="@ShouldPreventNext(currentStep)" Variant="Variant.Filled" OnClick="()=> Next()">Next</MudButton>
         </div>
     </div>
 }
@@ -119,8 +125,19 @@
 {
     <div>
         <h1 class="wizard-header">Setting the Scene</h1>
+        <div class="wizard-text">
+            Before we dive into the greenery of your homestead, let's pinpoint your patch of paradise. Your location helps us provide climate-specific advice. Rest assured, your homestead's whereabouts are strictly for our eyes only—your privacy is as important as fertile soil to us. Only your Zip Code is required, but the more information you provide, the closer we can pinpoint your exact growing zone and climate.
+        </div>
+
+        <div class="step2-inputs">
+
+            <MudInput T="String" Value="Address" ValueChanged="(value) => Address= value" FullWidth="false" Variant="Variant.Filled" Placeholder="Address (Optional)"/>
+            <MudInput T="String" Value="City" ValueChanged="(value) => City= value " FullWidth="false" Variant="Variant.Filled" Placeholder="City (Optional)"  />
+            <MudInput T="String" Value="State" ValueChanged="(value) => State= value " FullWidth="false" Variant="Variant.Filled" Placeholder="State (Optional)"  />
+            <MudInput T="String" Value="Zip" ValueChanged="(value) => Zip= value " FullWidth="false" Variant="Variant.Filled" Placeholder="Zip Code (Required)"  />
+        </div>
         <div class="wizard-next">
-            <MudButton Variant="Variant.Filled" OnClick="()=> Next()">Next</MudButton>
+            <MudButton Variant="Variant.Filled" Disabled="@ShouldPreventNext(currentStep)" OnClick="()=> Next()">Next</MudButton>
         </div>
     </div>
 }
@@ -163,6 +180,19 @@
 }
 
 @code {
+    string? Email;
+    string? Password;
+
+    string? Address;
+    string? City;
+    string? State;
+    string? Zip;
+
+    decimal? Acreage;
+
+    List<string> TerrainFeatures = new List<string>();
+    List<string> PrimarySoilTypes = new List<string>();
+
 
     enum WizardStep
     {
@@ -188,6 +218,49 @@
 
 
         return step == currentStep ? red : green;
+    }
+
+    bool ShouldPreventNext(WizardStep step)
+    {
+        if (step == WizardStep.Step1)
+        {
+            if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
+            {
+                return true;
+            }
+            if (!Email.Contains("@") || !Email.Contains("."))
+            {
+                return true;
+            }
+        }
+
+        if (step == WizardStep.Step2)
+        {
+            if (string.IsNullOrWhiteSpace(Zip))
+            {
+                return true;
+            }
+        }
+
+        if (step == WizardStep.Step3)
+        {
+            if (Acreage == null)
+            {
+                return true;
+            }
+
+            if (TerrainFeatures.Count == 0)
+            {
+                return true;
+            }
+
+            if (PrimarySoilTypes.Count == 0)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     void Next()
