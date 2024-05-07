@@ -25,6 +25,16 @@
         display: flex;
     }
 
+    .wizard-selection-label {
+        color: var(--Leafy-Green, #5E8C61);
+        /* Label */
+        font-family: Montserrat;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+    }
+
     .step1-inputs {
         margin-top: 32px;
         display: flex;
@@ -35,6 +45,23 @@
         margin-top: 32px;
         display: flex;
         flex-direction: column;
+    }
+
+    .step3-inputs {
+        margin-top: 32px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .wizard-checkbox-options{
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+        .wizard-checkbox-options .mud-input-control-boolean-input {
+            flex: 1 1 50%; /* Grow and shrink equally, base width 50% */
+            box-sizing: border-box; /* Include padding and border in the element's width */
+            padding: 5px;
     }
 
     .wizard-next {
@@ -130,11 +157,10 @@
         </div>
 
         <div class="step2-inputs">
-
-            <MudInput T="String" Value="Address" ValueChanged="(value) => Address= value" FullWidth="false" Variant="Variant.Filled" Placeholder="Address (Optional)"/>
-            <MudInput T="String" Value="City" ValueChanged="(value) => City= value " FullWidth="false" Variant="Variant.Filled" Placeholder="City (Optional)"  />
-            <MudInput T="String" Value="State" ValueChanged="(value) => State= value " FullWidth="false" Variant="Variant.Filled" Placeholder="State (Optional)"  />
-            <MudInput T="String" Value="Zip" ValueChanged="(value) => Zip= value " FullWidth="false" Variant="Variant.Filled" Placeholder="Zip Code (Required)"  />
+            <MudInput T="String" Value="Address" ValueChanged="(value) => Address= value" FullWidth="false" Variant="Variant.Filled" Placeholder="Address (Optional)" />
+            <MudInput T="String" Value="City" ValueChanged="(value) => City= value " FullWidth="false" Variant="Variant.Filled" Placeholder="City (Optional)" />
+            <MudInput T="String" Value="State" ValueChanged="(value) => State= value " FullWidth="false" Variant="Variant.Filled" Placeholder="State (Optional)" />
+            <MudInput T="String" Value="Zip" ValueChanged="(value) => Zip= value " FullWidth="false" Variant="Variant.Filled" Placeholder="Zip Code (Required)" />
         </div>
         <div class="wizard-next">
             <MudButton Variant="Variant.Filled" Disabled="@ShouldPreventNext(currentStep)" OnClick="()=> Next()">Next</MudButton>
@@ -146,8 +172,35 @@
 {
     <div>
         <h1 class="wizard-header">Mapping Your Terrain</h1>
+
+        <div class="wizard-text">
+            Understanding the lay of your land helps us suggest the best use of your space. Whether you have vast pastures or a cozy backyard, every inch counts. Share your homestead's size and landscape, and we'll help you maximize every square foot.
+        </div>
+        <div class="step3-inputs">
+            <MudInput T="Decimal?" Value="TotalAcreage" ValueChanged="(value) => TotalAcreage= value " FullWidth="false" Variant="Variant.Filled" Placeholder="Total Acreage" />
+        </div>
+        <div class="wizard-selection-label">Terrain Features:</div>
+        <div class="wizard-checkbox-options">
+
+            @foreach (var feature in AvailableTerrainFeatures)
+            {
+                <MudCheckBox T="bool" Label="@feature"
+                             Value="SelectedTerrainFeatures.Contains(feature)"
+                             ValueChanged="() => TerrainFeaturesCheckboxChanged(feature)" />
+            }
+        </div>
+        <div class="wizard-selection-label">Primary Soil Type:</div>
+        <div class="wizard-checkbox-options">
+
+            @foreach (var soilType in AvailablePrimarySoilTypes)
+            {
+                <MudCheckBox T="bool" Label="@soilType"
+                             Value="SelectedPrimarySoilTypes.Contains(soilType)"
+                             ValueChanged="() => PrimarySoilTypesCheckboxChanged(soilType)" />
+            }
+        </div>
         <div class="wizard-next">
-            <MudButton Variant="Variant.Filled" OnClick="()=> Next()">Next</MudButton>
+            <MudButton Variant="Variant.Filled" Disabled="@ShouldPreventNext(currentStep)" OnClick="()=> Next()">Next</MudButton>
         </div>
     </div>
 }
@@ -188,10 +241,13 @@
     string? State;
     string? Zip;
 
-    decimal? Acreage;
+    decimal? TotalAcreage;
 
-    List<string> TerrainFeatures = new List<string>();
-    List<string> PrimarySoilTypes = new List<string>();
+    List<string> AvailableTerrainFeatures = new List<string> { "Wooded Area", "Pasture", "Tillable Land", "Pond", "River/Stream", "Wetland/Marsh" };
+    List<string> SelectedTerrainFeatures = new List<string>();
+
+    List<string> AvailablePrimarySoilTypes = new List<string> { "Sandy", "Peaty", "Clay", "Loamy", "Silty", "Chalky", "Saline", "Rocky" };
+    List<string> SelectedPrimarySoilTypes = new List<string>();
 
 
     enum WizardStep
@@ -244,17 +300,17 @@
 
         if (step == WizardStep.Step3)
         {
-            if (Acreage == null)
+            if (TotalAcreage == null || TotalAcreage == 0)
             {
                 return true;
             }
 
-            if (TerrainFeatures.Count == 0)
+            if (SelectedTerrainFeatures.Count == 0)
             {
                 return true;
             }
 
-            if (PrimarySoilTypes.Count == 0)
+            if (SelectedPrimarySoilTypes.Count == 0)
             {
                 return true;
             }
@@ -267,4 +323,31 @@
     {
         currentStep = (WizardStep)((int)currentStep + 1);
     }
+
+
+    private void TerrainFeaturesCheckboxChanged(string feature)
+    {
+        if (SelectedTerrainFeatures.Contains(feature))
+        {
+            SelectedTerrainFeatures.Remove(feature);
+        }
+        else
+        {
+            SelectedTerrainFeatures.Add(feature);
+        }
+    }
+
+
+    private void PrimarySoilTypesCheckboxChanged(string soilType)
+    {
+        if (SelectedPrimarySoilTypes.Contains(soilType))
+        {
+            SelectedPrimarySoilTypes.Remove(soilType);
+        }
+        else
+        {
+            SelectedPrimarySoilTypes.Add(soilType);
+        }
+    }
+
 }
