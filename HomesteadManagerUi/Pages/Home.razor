@@ -53,7 +53,7 @@
         flex-direction: column;
     }
 
-    .wizard-checkbox-options{
+    .wizard-checkbox-options {
         display: flex;
         flex-wrap: wrap;
     }
@@ -62,7 +62,7 @@
             flex: 1 1 50%; /* Grow and shrink equally, base width 50% */
             box-sizing: border-box; /* Include padding and border in the element's width */
             padding: 5px;
-    }
+        }
 
     .wizard-next {
     }
@@ -94,7 +94,6 @@
         </svg>
     </span>
     <span>
-    using HomesteadManager.Shared.Models;
         <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle id="Ellipse 3" cx="16" cy="16" r="16" fill="@GetStepColor(WizardStep.Step3)" />
             <text x="16" y="18" font-family="Lora" font-size="20" fill="white" text-anchor="middle" dominant-baseline="middle">3</text>
@@ -144,7 +143,9 @@
         </div>
 
         <div class="wizard-next">
-            <MudButton Disabled="@ShouldPreventNext(currentStep)" Variant="Variant.Filled" OnClick="()=> Next()">Next</MudButton>
+            <MudButton Disabled="@ShouldPreventNext(currentStep)"
+                       Variant="Variant.Filled"
+                       Color="@Color.Primary" OnClick="()=> Next()">Next</MudButton>
         </div>
     </div>
 }
@@ -164,7 +165,7 @@
             <MudInput T="String" Value="Zip" ValueChanged="(value) => Zip= value " FullWidth="false" Variant="Variant.Filled" Placeholder="Zip Code (Required)" />
         </div>
         <div class="wizard-next">
-            <MudButton Variant="Variant.Filled" Disabled="@ShouldPreventNext(currentStep)" OnClick="()=> Next()">Next</MudButton>
+            <MudButton Variant="Variant.Filled" Color="@Color.Primary" Disabled="@ShouldPreventNext(currentStep)" OnClick="()=> Next()">Next</MudButton>
         </div>
     </div>
 }
@@ -187,7 +188,7 @@
             {
                 <MudCheckBox T="bool" Label="@feature"
                              Value="SelectedTerrainFeatures.Contains(feature)"
-                             ValueChanged="() => TerrainFeaturesCheckboxChanged(feature)" />
+                             ValueChanged="() => CheckboxChanged(SelectedTerrainFeatures, feature)" />
             }
         </div>
         <div class="wizard-selection-label">Primary Soil Type:</div>
@@ -197,11 +198,11 @@
             {
                 <MudCheckBox T="bool" Label="@soilType"
                              Value="SelectedPrimarySoilTypes.Contains(soilType)"
-                             ValueChanged="() => PrimarySoilTypesCheckboxChanged(soilType)" />
+                             ValueChanged="() => CheckboxChanged(SelectedPrimarySoilTypes , soilType)" />
             }
         </div>
         <div class="wizard-next">
-            <MudButton Variant="Variant.Filled" Disabled="@ShouldPreventNext(currentStep)" OnClick="()=> Next()">Next</MudButton>
+            <MudButton Variant="Variant.Filled" Color="@Color.Primary" Disabled="@ShouldPreventNext(currentStep)" OnClick="()=> Next()">Next</MudButton>
         </div>
     </div>
 }
@@ -210,8 +211,120 @@
 {
     <div>
         <h1 class="wizard-header">Cultivating Your Passions</h1>
+        <div class="wizard-text">
+            What seeds of possibility do you want to sow? Tell us your homesteading interests, and we'll nurture them with tailored advice. From rooftop radishes to pasture-raised poultry, we're here to help your endeavors thrive.
+        </div>
+
+        <div>
+            <div class="wizard-selection-label">Gardening:</div>
+            <div class="wizard-checkbox-options">
+
+                @foreach (var gardening in AvailableGardeningTypes)
+                {
+                    <MudCheckBox T="bool" Label="@gardening"
+                                 Value="SelectedGardeningTypes.Contains(gardening)"
+                                 ValueChanged="() => CheckboxChanged(SelectedGardeningTypes, gardening)" />
+                }
+            </div>
+
+            <div class="wizard-selection-label">Livestock:</div>
+            <div class="wizard-checkbox-options">
+
+                @foreach (var livestock in AvailableLivestockTypes)
+                {
+                    <MudCheckBox T="bool" Label="@livestock"
+                                 Value="SelectedLivestockTypes.Contains(livestock)"
+                                 ValueChanged="() => CheckboxChanged(SelectedLivestockTypes, livestock)" />
+                }
+            </div>
+
+            <div class="wizard-selection-label">Food Preservation:</div>
+            <div class="wizard-checkbox-options">
+                @foreach (var preservation in AvailableFoodPreservationTypes)
+                {
+                    <MudCheckBox T="bool" Label="@preservation"
+                                 Value="SelectedFoodPreservationTypes.Contains(preservation)"
+                                 ValueChanged="() => CheckboxChanged(SelectedFoodPreservationTypes, preservation)" />
+                }
+            </div>
+
+            <div class="wizard-selection-label">Foraging:</div>
+            <div class="wizard-checkbox-options">
+
+                @foreach (var foraging in AvailableForagingTypes)
+                {
+                    <MudCheckBox T="bool" Label="@foraging"
+                                 Value="SelectedForagingTypes.Contains(foraging)"
+                                 ValueChanged="() => CheckboxChanged(SelectedForagingTypes, foraging)" />
+                }
+            </div>
+
+            <div class="wizard-selection-label">Hunting and Fishing:</div>
+            <div class="wizard-checkbox-options">
+
+                @foreach (var huntAndFish in AvailableHuntingFishingTypes)
+                {
+                    <MudCheckBox T="bool" Label="@huntAndFish"
+                                 Value="SelectedHuntingFishingTypes.Contains(huntAndFish)"
+                                 ValueChanged="() => CheckboxChanged(SelectedHuntingFishingTypes, huntAndFish)" />
+                }
+            </div>
+
+            <div class="wizard-selection-label">Renewable Energy:</div>
+            <div class="wizard-checkbox-options">
+
+                @foreach (var renewable in AvailableRenewableEnergyTypes)
+                {
+                    <MudCheckBox T="bool" Label="@renewable"
+                                 Value="SelectedRenewableEnergyTypes.Contains(renewable)"
+                                 ValueChanged="() => CheckboxChanged(SelectedRenewableEnergyTypes, renewable)" />
+                }
+            </div>
+
+            <div class="wizard-selection-label">Homestead Construction and Maintenance:</div>
+            <div class="wizard-checkbox-options">
+
+                @foreach (var construction in AvailableHomesteadConstructionMaintenanceTypes)
+                {
+                    <MudCheckBox T="bool" Label="@construction"
+                                 Value="SelectedHomesteadConstructionMaintenanceTypes.Contains(construction)"
+                                 ValueChanged="() => CheckboxChanged(SelectedHomesteadConstructionMaintenanceTypes, construction)" />
+                }
+            </div>
+
+            <div class="wizard-selection-label">Homestead Crafts and Skills:</div>
+            <div class="wizard-checkbox-options">
+                @foreach (var craft in AvailableHomesteadCraftsAndSkillTypes)
+                {
+                    <MudCheckBox T="bool" Label="@craft"
+                                 Value="SelectedHomesteadCraftsAndSkillTypes.Contains(craft)"
+                                 ValueChanged="() => CheckboxChanged(SelectedHomesteadCraftsAndSkillTypes, craft)" />
+                }
+            </div>
+
+            <div class="wizard-selection-label">Emergency Preparedness:</div>
+            <div class="wizard-checkbox-options">
+                @foreach (var emergency in AvailableEmergencyPreparednessTypes)
+                {
+                    <MudCheckBox T="bool" Label="@emergency"
+                                 Value="SelectedEmergencyPreparednessTypes.Contains(emergency)"
+                                 ValueChanged="() => CheckboxChanged(SelectedEmergencyPreparednessTypes, emergency)" />
+                }
+            </div>
+
+            <div class="wizard-selection-label">Financial Management:</div>
+            <div class="wizard-checkbox-options">
+                @foreach (var financial in AvailableFinancialManagementTypes)
+                {
+                    <MudCheckBox T="bool" Label="@financial"
+                                 Value="SelectedFinancialManagementTypes.Contains(financial)"
+                                 ValueChanged="() => CheckboxChanged(SelectedFinancialManagementTypes,financial)" />
+                }
+            </div>
+        </div>
+
         <div class="wizard-next">
-            <MudButton Variant="Variant.Filled" OnClick="()=> Next()">Next</MudButton>
+            <MudButton Variant="Variant.Filled" Color="@Color.Primary" OnClick="()=> Next()">Next</MudButton>
         </div>
     </div>
 }
@@ -221,7 +334,7 @@
     <div>
         <h1 class="wizard-header">Preparing the Soil for Success</h1>
         <div class="wizard-next">
-            <MudButton Variant="Variant.Filled" OnClick="()=> Next()">Next</MudButton>
+            <MudButton Variant="Variant.Filled" Color="@Color.Primary" OnClick="()=> Next()">Next</MudButton>
         </div>
     </div>
 }
@@ -249,6 +362,36 @@
 
     List<string> AvailablePrimarySoilTypes = new List<string> { "Sandy", "Peaty", "Clay", "Loamy", "Silty", "Chalky", "Saline", "Rocky" };
     List<string> SelectedPrimarySoilTypes = new List<string>();
+
+    List<string> AvailableGardeningTypes = new List<string> { "Vegetable gardening", "Herb gardening", "Fruit orchards", "Composting and soil ammendment", "Greenhouse management", "Permaculture practices" };
+    List<string> SelectedGardeningTypes = new List<string>();
+
+    List<string> AvailableLivestockTypes = new List<string> { "Chicken keeping (eggs and meat)", "Meat animals (pigs, sheep, cattle)", "Beekeeping for honey and pollination", "Rabbits for meat and fur", "Dairy animals (cows, goats)", "Exotic Animals (llamas, ostrich, etc.)", "Aquaculture or fish farming" };
+    List<string> SelectedLivestockTypes = new List<string>();
+
+    List<string> AvailableFoodPreservationTypes = new List<string> { "Canning and bottling", "Dehydrating", "Freezing", "Fermenting and pickling", "Smoking and curing meats", "Root cellar storage" };
+    List<string> SelectedFoodPreservationTypes = new List<string>();
+
+    List<string> AvailableForagingTypes = new List<string> { "Wild edible plants", "Medicinal herbs", "Mushroom hunting", "Berries and nuts" };
+    List<string> SelectedForagingTypes = new List<string>();
+
+    List<string> AvailableHuntingFishingTypes = new List<string> { "Wild game hunting", "Trapping", "Fishing", "Butchering and processing game" };
+    List<string> SelectedHuntingFishingTypes = new List<string>();
+
+    List<string> AvailableRenewableEnergyTypes = new List<string> { "Solar power systems", "Wind turbines", "Hydro power", "Biomass and biofuel" };
+    List<string> SelectedRenewableEnergyTypes = new List<string>();
+
+    List<string> AvailableHomesteadConstructionMaintenanceTypes = new List<string> { "Building coops, barns, and other outbuildings", "Fencing and gates", "Basic carpentry and repair skills", "Off-grid living structures", "Tiny homes" };
+    List<string> SelectedHomesteadConstructionMaintenanceTypes = new List<string>();
+
+    List<string> AvailableHomesteadCraftsAndSkillTypes = new List<string> { "Spinning and weaving", "Pottery and ceramics", "Woodworking and carving", "Soap and candle making" };
+    List<string> SelectedHomesteadCraftsAndSkillTypes = new List<string>();
+
+    List<string> AvailableEmergencyPreparednessTypes = new List<string> { "First aid and emergency care", "Herbal remedies", "Emergency food and water storage", "Bugout planning", "Home defense" };
+    List<string> SelectedEmergencyPreparednessTypes = new List<string>();
+
+    List<string> AvailableFinancialManagementTypes = new List<string> { "Budgeting and expense tracking", "Bartering and trading systems", "Income streams from homesteading", "Investing in homestead improvements" };
+    List<string> SelectedFinancialManagementTypes = new List<string>();
 
     protected override async Task OnInitializedAsync() =>
         await Http.GetFromJsonAsync<List<HomesteadManager.Shared.Models.Homestead>>("api/Homestead");
@@ -328,29 +471,18 @@
     }
 
 
-    private void TerrainFeaturesCheckboxChanged(string feature)
+    private void CheckboxChanged(List<string> options, string option)
     {
-        if (SelectedTerrainFeatures.Contains(feature))
+        if (options.Contains(option))
         {
-            SelectedTerrainFeatures.Remove(feature);
+            options.Remove(option);
         }
         else
         {
-            SelectedTerrainFeatures.Add(feature);
+            options.Add(option);
         }
     }
 
 
-    private void PrimarySoilTypesCheckboxChanged(string soilType)
-    {
-        if (SelectedPrimarySoilTypes.Contains(soilType))
-        {
-            SelectedPrimarySoilTypes.Remove(soilType);
-        }
-        else
-        {
-            SelectedPrimarySoilTypes.Add(soilType);
-        }
-    }
 
 }
