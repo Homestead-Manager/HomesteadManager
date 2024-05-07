@@ -34,6 +34,12 @@ namespace HomesteadManagerApi.Controllers
             return NotFound("AssistantResponse returned null.");
         }
 
+        [HttpGet("hello")]
+        public ActionResult<string> Hello()
+        {
+            return Ok("Hello World");
+        }
+
         [HttpPost("garden")]
         public async Task<ActionResult<Garden>> GetRecommendedGarden(GardenRecommendationRequest request)
         {
