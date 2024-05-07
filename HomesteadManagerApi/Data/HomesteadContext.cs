@@ -1,7 +1,7 @@
 namespace HomesteadManagerApi.Data;
 
+using HomesteadManager.Shared.Models;
 using Microsoft.EntityFrameworkCore;
-using HomesteadManagerApi.Models;
 
 public class HomesteadContext : DbContext
 {

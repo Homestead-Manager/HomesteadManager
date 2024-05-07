@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HomesteadManagerApi.Data;
-using HomesteadManagerApi.Models;
+using HomesteadManager.Shared.Models;
 
 namespace HomesteadManagerApi.Controllers
 {

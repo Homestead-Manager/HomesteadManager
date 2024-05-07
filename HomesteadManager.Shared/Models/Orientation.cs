@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace HomesteadManagerApi.Models;
+namespace HomesteadManager.Shared.Models;
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum Orientation
