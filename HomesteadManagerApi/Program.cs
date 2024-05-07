@@ -34,7 +34,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowBlazorOrigin", builder =>
     {
-        builder.WithOrigins("https://localhost:7052") // Replace with the actual origin of your Blazor app
+        builder.WithOrigins("http://localhost:4280") // Replace with the actual origin of your Blazor app
                .AllowAnyMethod()
                .AllowAnyHeader()
                .AllowCredentials(); // Include this if credentials are needed, like cookies or authentication.
@@ -56,7 +56,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 app.UseCors(policy =>
-    policy.WithOrigins("http://localhost:5204")
+    policy.WithOrigins("http://localhost:4280")
     .AllowAnyMethod()
     .WithHeaders(HeaderNames.ContentType));
 app.MapControllers();
