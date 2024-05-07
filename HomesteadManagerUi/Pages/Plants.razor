@@ -16,6 +16,9 @@
 <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick='(() => AddPlant("Eggplant"))'>Add Eggplant
 </MudButton>
 
+<MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="DeletePlant">Delete Plant
+</MudButton>
+
 <MudDropContainer T="DropItem" Items="_items" CanDropClass="mud-border-info" NoDropClass="mud-border-error"
     CanDrop="@( (item,identifier ) => customCanDrop(item,identifier))"
     ItemsSelector="@((item,dropzone) => item.Identifier == dropzone)" ItemDropped="ItemUpdated"
@@ -52,6 +55,11 @@
 @code
 {
 
+    protected override async Task OnInitializedAsync()
+    {
+        generateBS();
+    }
+
     private Boolean customCanDrop(DropItem item, string identifier)
     {
 
@@ -60,9 +68,21 @@
             return false;
         }
 
-        if (checkLinkedPlantsValidPosition(item, identifier) == false)
+        if (checkLinkedPlantsValidPosition(item, identifier) == false && identifier.Equals("New Plant") == false)
         {
             return false;
+        }
+
+        if (identifier.Equals("New Plant") == true && item.Link.ToString() != "00000000-0000-0000-0000-000000000000")
+        {
+            var linkedPlant = _items.Find(x => x.Link.Equals(item.Id));
+            for (var i = 1; i <= 3; i++)
+            {
+
+                linkedPlant.Identifier = "New Plant";
+
+                linkedPlant = _items.Find(x => x.Link.Equals(linkedPlant.Id));
+            }
         }
         return true;
 
@@ -153,7 +173,7 @@
     {
         dropItem.Item.Identifier = dropItem.DropzoneIdentifier;
 
-        if (dropItem.Item.Link.ToString() != "00000000-0000-0000-0000-000000000000")
+        if (dropItem.Item.Link.ToString() != "00000000-0000-0000-0000-000000000000" && dropItem.Item.Identifier.Equals("New Plant") != true)
         {
             setLinkedPlants(dropItem);
         }
@@ -226,7 +246,53 @@
 
     }
 
-    private List<DropItem> _items = new()
+    private List<DropItemType> dropItemTypes = new()
+{
+new DropItemType() { Icon = "1F345", Tooltip = "Tomato" },
+new DropItemType() { Icon = "1F346", Tooltip = "Eggplant" },
+new DropItemType() { Icon = "1F954", Tooltip = "Potato" },
+new DropItemType() { Icon = "1F955", Tooltip = "Carrot" },
+};
+
+    Random rnd = new Random();
+
+    private List<DropItem> _items = new List<DropItem>();
+
+    private void generateBS()
+    {
+        for (var i = 0; i < 77; i++)
+        {
+            int randomNum = rnd.Next(0, 5);
+            Boolean skip = false;
+
+            if (i > 7 && i < 10)
+            {
+                skip = true;
+            }
+
+            string iString = i.ToString();
+
+            if (i > 9 && Int32.Parse(iString[1].ToString()) > 7)
+            {
+                skip = true;
+            }
+
+            Console.WriteLine(randomNum);
+
+            if (randomNum != 4 && skip == false)
+            {
+                _items.Add(new DropItem()
+                    {
+                        Icon = dropItemTypes[randomNum].Icon,
+                        Tooltip =
+                    dropItemTypes[randomNum].Tooltip,
+                        Identifier = i > 10 ? i.ToString() : "0" + i.ToString()
+                    });
+            }
+        }
+    }
+
+    private List<DropItem> _itemsOld = new()
 {
 new DropItem(){ Icon = "1F345", Tooltip="Tomato", Identifier = "00" },
 new DropItem(){ Icon = "1F346", Tooltip="Eggplant", Identifier = "01" },
@@ -270,6 +336,35 @@ new DropItem(){ Icon = "1F955", Tooltip="Carrot", Identifier = "77" },
         {
             createNewPlant(name);
         }
+    }
+
+
+    private void DeletePlant()
+    {
+        var item = _items.Find(x => x.Identifier.Equals("New Plant"));
+        if (item != null)
+        {
+            var linkedPlant = _items.Find(x => x.Link.Equals(item.Id));
+            _items.Remove(item);
+
+            if (linkedPlant != null)
+            {
+                for (var i = 1; i <= 3; i++)
+                {
+
+                    if (linkedPlant != null)
+                    {
+
+                        Guid linkId = linkedPlant.Id;
+
+                        _items.Remove(linkedPlant);
+
+                        linkedPlant = _items.Find(x => x.Link.Equals(linkId));
+                    }
+                }
+            }
+        }
+
     }
 
     private void createNewPlant(string name)
@@ -376,6 +471,13 @@ new DropItem(){ Icon = "1F955", Tooltip="Carrot", Identifier = "77" },
 
         //fourthPlant.Link = thirdPlant.Id;
         firstPlant.Link = fourthPlant.Id;
+    }
+
+    public class DropItemType
+    {
+        public string Icon { get; init; }
+
+        public string Tooltip { get; init; }
     }
 
     public class DropItem
