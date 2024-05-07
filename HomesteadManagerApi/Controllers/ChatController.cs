@@ -22,7 +22,7 @@ namespace HomesteadManagerApi.Controllers
         public async Task<ActionResult<List<PlantZoneInfo>>> GetPlants(string zipcode)
         {
             var schema = "[{\"Plant\": {\"CommonName\": \"\", \"ScientificName\": \"\", \"PlantType\": \"\", \"SunRequirement\": \"\", \"WaterRequirement\": \"\"}, \"ZoneID\": \"\", \"SowingMethod\": \"\", \"OptimalSowingPeriodStart\": \"yyyy-mm-dd\", \"OptimalSowingPeriodEnd\": \"yyyy-mm-dd\", \"HarvestPeriodStart\": \"yyyy-mm-dd\", \"HarvestPeriodEnd\": \"yyyy-mm-dd\", \"ZoneSpecificNotes\": \"\"}]";
-            var prompt = $"Give me a list of at least 10 Plants that grow in {zipcode}. Respond with a list of JSON objects in this format: {schema}";
+            var prompt = $"Give me a list of at least 10 Plants that grow in {zipcode}. Respond with a list of JSON objects in this format: {schema}. Use the USDA plant hardiness zone cooresponding to the provided zip code as the ZoneID";
             var assistantResponse = await GetAsistantResponse(prompt);
 
             if (assistantResponse != null)
