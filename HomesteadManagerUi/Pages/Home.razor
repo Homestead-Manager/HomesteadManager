@@ -67,6 +67,7 @@
         </svg>
     </span>
     <span>
+    using HomesteadManager.Shared.Models;
         <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle id="Ellipse 3" cx="16" cy="16" r="16" fill="@GetStepColor(WizardStep.Step3)" />
             <text x="16" y="18" font-family="Lora" font-size="20" fill="white" text-anchor="middle" dominant-baseline="middle">3</text>
@@ -180,6 +181,7 @@
 }
 
 @code {
+<<<<<<< Updated upstream
     string? Email;
     string? Password;
 
@@ -193,6 +195,10 @@
     List<string> TerrainFeatures = new List<string>();
     List<string> PrimarySoilTypes = new List<string>();
 
+=======
+    protected override async Task OnInitializedAsync() =>
+        await Http.GetFromJsonAsync<List<HomesteadManager.Shared.Models.Homestead>>("api/Homestead");
+>>>>>>> Stashed changes
 
     enum WizardStep
     {
