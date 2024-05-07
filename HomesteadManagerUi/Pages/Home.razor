@@ -118,39 +118,50 @@
 @if (currentStep == WizardStep.Step2)
 {
     <div>
-        Step2
-    </div>
-    <div class="wizard-next">
-        <MudButton Variant="Variant.Filled" OnClick="()=> Next()">Next</MudButton>
+        <h1 class="wizard-header">Setting the Scene</h1>
+        <div class="wizard-next">
+            <MudButton Variant="Variant.Filled" OnClick="()=> Next()">Next</MudButton>
+        </div>
     </div>
 }
 
 @if (currentStep == WizardStep.Step3)
 {
     <div>
-        Step3
-    </div>
-    <div class="wizard-next">
-        <MudButton Variant="Variant.Filled" OnClick="()=> Next()">Next</MudButton>
+        <h1 class="wizard-header">Mapping Your Terrain</h1>
+        <div class="wizard-next">
+            <MudButton Variant="Variant.Filled" OnClick="()=> Next()">Next</MudButton>
+        </div>
     </div>
 }
 
 @if (currentStep == WizardStep.Step4)
 {
     <div>
-        Step4
-    </div>
-    <div class="wizard-next">
-        <MudButton Variant="Variant.Filled" OnClick="()=> Next()">Next</MudButton>
+        <h1 class="wizard-header">Cultivating Your Passions</h1>
+        <div class="wizard-next">
+            <MudButton Variant="Variant.Filled" OnClick="()=> Next()">Next</MudButton>
+        </div>
     </div>
 }
 
 @if (currentStep == WizardStep.Step5)
 {
     <div>
-        Step5
+        <h1 class="wizard-header">Preparing the Soil for Success</h1>
+        <div class="wizard-next">
+            <MudButton Variant="Variant.Filled" OnClick="()=> Next()">Next</MudButton>
+        </div>
     </div>
 }
+
+@if (currentStep == WizardStep.Step6)
+{
+    <div>
+        <h1 class="wizard-header">Welcome to Your Homestead Journey!</h1>
+    </div>
+}
+
 @code {
 
     enum WizardStep
@@ -159,7 +170,8 @@
         Step2,
         Step3,
         Step4,
-        Step5
+        Step5,
+        Step6
     }
 
     WizardStep currentStep = WizardStep.Step1;
@@ -169,7 +181,12 @@
         var green = "#5E8C61";
         var red = "#E57F84";
 
-     
+        if (step == WizardStep.Step6)
+        {
+            return green;
+        }
+
+
         return step == currentStep ? red : green;
     }
 
