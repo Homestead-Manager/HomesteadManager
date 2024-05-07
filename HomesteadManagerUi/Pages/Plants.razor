@@ -344,10 +344,11 @@ new DropItem(){ Icon = "1F955", Tooltip="Carrot", Identifier = "77" },
         var item = _items.Find(x => x.Identifier.Equals("New Plant"));
         if (item != null)
         {
+            var linked = item.Link;
             var linkedPlant = _items.Find(x => x.Link.Equals(item.Id));
             _items.Remove(item);
 
-            if (linkedPlant != null)
+            if (linked.ToString() != "00000000-0000-0000-0000-000000000000" && linkedPlant != null)
             {
                 for (var i = 1; i <= 3; i++)
                 {
@@ -358,6 +359,8 @@ new DropItem(){ Icon = "1F955", Tooltip="Carrot", Identifier = "77" },
                         Guid linkId = linkedPlant.Id;
 
                         _items.Remove(linkedPlant);
+
+                        Console.WriteLine("Murdering plants: " + i);
 
                         linkedPlant = _items.Find(x => x.Link.Equals(linkId));
                     }
