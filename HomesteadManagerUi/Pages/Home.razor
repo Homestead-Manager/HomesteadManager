@@ -1,50 +1,180 @@
-﻿@page "/"
+@page "/"
 @inject NavigationManager _nav
 @inject HttpClient Http
 <style>
-    .homestead-card {
-        cursor: pointer;
-        width: 18rem;
-        margin-bottom: 10px;
+    .wizard-steps-container {
+        padding: 8px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
-    .homestead-card:hover {
-        background-color: gray;
+    .wizard-header {
+        color: #5E8C61;
+        text-align: center;
+        /* Heading 1 */
+        font-family: Lora;
+        font-size: 32px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+    }
+
+    .wizard-text {
+        padding-top: 16px;
+        display: flex;
+    }
+
+    .step1-inputs {
+        margin-top: 32px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .wizard-next {
     }
 </style>
-<PageTitle>Home</PageTitle>
+<PageTitle>Wizard</PageTitle>
 
-<h1>Homesteads</h1>
 
-@foreach (var hs in homesteads)
+<div class="wizard-steps-container">
+    <span>
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle id="Ellipse 1" cx="16" cy="16" r="16" fill="@GetStepColor(WizardStep.Step1)" />
+            <text x="16" y="18" font-family="Lora" font-size="20" fill="white" text-anchor="middle" dominant-baseline="middle">1</text>
+        </svg>
+    </span>
+    <span>
+        <svg width="38" height="4" viewBox="0 0 38 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path id="Line 1" d="M0 2L37.4833 2" stroke="#5E8C61" stroke-opacity="0.5" stroke-width="3" />
+        </svg>
+    </span>
+    <span>
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle id="Ellipse 2" cx="16" cy="16" r="16" fill="@GetStepColor(WizardStep.Step2)" />
+            <text x="16" y="18" font-family="Lora" font-size="20" fill="white" text-anchor="middle" dominant-baseline="middle">2</text>
+        </svg>
+    </span>
+    <span>
+        <svg width="38" height="4" viewBox="0 0 38 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path id="Line 2" d="M0 2L37.4833 2" stroke="#5E8C61" stroke-opacity="0.5" stroke-width="3" />
+        </svg>
+    </span>
+    <span>
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle id="Ellipse 3" cx="16" cy="16" r="16" fill="@GetStepColor(WizardStep.Step3)" />
+            <text x="16" y="18" font-family="Lora" font-size="20" fill="white" text-anchor="middle" dominant-baseline="middle">3</text>
+        </svg>
+    </span>
+    <span>
+        <svg width="38" height="4" viewBox="0 0 38 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path id="Line 3" d="M0 2L37.4833 2" stroke="#5E8C61" stroke-opacity="0.5" stroke-width="3" />
+        </svg>
+    </span>
+    <span>
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle id="Ellipse 4" cx="16" cy="16" r="16" fill="@GetStepColor(WizardStep.Step4)" />
+            <text x="16" y="18" font-family="Lora" font-size="20" fill="white" text-anchor="middle" dominant-baseline="middle">4</text>
+        </svg>
+    </span>
+    <span>
+        <svg width="38" height="4" viewBox="0 0 38 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path id="Line 4" d="M0 2L37.4833 2" stroke="#5E8C61" stroke-opacity="0.5" stroke-width="3" />
+        </svg>
+    </span>
+    <span>
+
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle id="Ellipse 5" cx="16" cy="16" r="16" fill="@GetStepColor(WizardStep.Step5)" />
+            <text x="16" y="18" font-family="Lora" font-size="20" fill="white" text-anchor="middle" dominant-baseline="middle">5</text>
+        </svg>
+    </span>
+</div>
+
+@if (currentStep == WizardStep.Step1)
 {
-    <MudCard @onclick="@(()=>_nav.NavigateTo("/homesteads/" + @hs.Id))" Class="homestead-card">
-        <MudCardContent>
-            <MudText>@hs.Name</MudText>
-        </MudCardContent>
-    </MudCard>
+    <div>
+        <h1 class="wizard-header">Create Account</h1>
 
+        <div class="wizard-text">
+            Let's lay the groundwork for your digital homestead. Secure your account by providing an email address and creating a strong password. This will be your key to unlocking a world of personalized homesteading management at your fingertips.
+        </div>
+
+        <div class="step1-inputs">
+
+            <MudInput T="String" FullWidth="false" Variant="Variant.Filled" Placeholder="Email" InputType="InputType.Email" />
+            <MudInput T="String" FullWidth="false" Variant="Variant.Filled" Placeholder="Password" InputType="InputType.Password" />
+        </div>
+        <div class="wizard-text">
+            Ready to grow? Hit 'Next' to plant the seeds of your homestead's future.
+        </div>
+
+        <div class="wizard-next">
+            <MudButton Variant="Variant.Filled" OnClick="()=> Next()">Next</MudButton>
+        </div>
+    </div>
 }
 
-<form @onsubmit="AddHomestead">
-    <MudTextField T="string" Label="Homestead Name" @bind-value="newHomesteadName"></MudTextField>
-</form>
+@if (currentStep == WizardStep.Step2)
+{
+    <div>
+        Step2
+    </div>
+    <div class="wizard-next">
+        <MudButton Variant="Variant.Filled" OnClick="()=> Next()">Next</MudButton>
+    </div>
+}
 
+@if (currentStep == WizardStep.Step3)
+{
+    <div>
+        Step3
+    </div>
+    <div class="wizard-next">
+        <MudButton Variant="Variant.Filled" OnClick="()=> Next()">Next</MudButton>
+    </div>
+}
+
+@if (currentStep == WizardStep.Step4)
+{
+    <div>
+        Step4
+    </div>
+    <div class="wizard-next">
+        <MudButton Variant="Variant.Filled" OnClick="()=> Next()">Next</MudButton>
+    </div>
+}
+
+@if (currentStep == WizardStep.Step5)
+{
+    <div>
+        Step5
+    </div>
+}
 @code {
-    public string? newHomesteadName;
-    private List<Homestead> homesteads = new();
 
-
-    protected override async Task OnInitializedAsync() =>
-    homesteads = await Http.GetFromJsonAsync<List<Homestead>>("api/Homestead") ?? [];
-
-    private void AddHomestead()
+    enum WizardStep
     {
-        if (!string.IsNullOrWhiteSpace(newHomesteadName))
-        {
-            var homestead = new Homestead { Id = Guid.NewGuid().ToString(), Name = newHomesteadName };
-            homesteads.Add(homestead);
-            Http.PostAsJsonAsync<Homestead>("api/Homestead", homestead);
-        }
+        Step1,
+        Step2,
+        Step3,
+        Step4,
+        Step5
+    }
+
+    WizardStep currentStep = WizardStep.Step1;
+
+    string GetStepColor(WizardStep step)
+    {
+        var green = "#5E8C61";
+        var red = "#E57F84";
+
+     
+        return step == currentStep ? red : green;
+    }
+
+    void Next()
+    {
+        currentStep = (WizardStep)((int)currentStep + 1);
     }
 }
