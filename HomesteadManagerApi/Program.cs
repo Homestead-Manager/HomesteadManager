@@ -30,11 +30,12 @@ builder.Services.AddSingleton<IOpenAIService, OpenAIService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var blazorUrl = builder.Configuration["BlazorUrl"];
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowBlazorOrigin", builder =>
     {
-        builder.WithOrigins("http://localhost:4280") // Replace with the actual origin of your Blazor app
+        builder.WithOrigins(blazorUrl) // Replace with the actual origin of your Blazor app
                .AllowAnyMethod()
                .AllowAnyHeader()
                .AllowCredentials(); // Include this if credentials are needed, like cookies or authentication.
@@ -56,7 +57,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 app.UseCors(policy =>
-    policy.WithOrigins("http://localhost:4280")
+    policy.WithOrigins("http://localhost:5204")
     .AllowAnyMethod()
     .WithHeaders(HeaderNames.ContentType));
 app.MapControllers();
