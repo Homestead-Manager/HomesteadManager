@@ -1,3 +1,4 @@
+using HomesteadManager.Shared.Models;
 using HomesteadManagerApi.Interfaces;
 using HomesteadManagerApi.Models;
 using HomesteadManagerApi.Models.OpenAi;
