@@ -66,12 +66,11 @@ else
         </table>
     }
 </div>
-<div>
     @if (loading)
     {
         <div class="loading-progress">Getting data from the API...</div>
     }
-</div>
+
 @code {
     private string message;
     private string inputError = "";
@@ -86,15 +85,28 @@ else
 
     private async void GetPlants()
     {
-        loading = true;
-        inputError = "";
-        if (string.IsNullOrWhiteSpace(zipCode))
+        try
         {
-            inputError = "Zip code is required.";
-            return;
-        }
 
-        Plants = await api.GetPlants(zipCode);
-        loading = false;
+            loading = true;
+            inputError = "";
+            if (string.IsNullOrWhiteSpace(zipCode))
+            {
+                inputError = "Zip code is required.";
+                return;
+            }
+
+            Plants = await api.GetPlants(zipCode);
+        }
+        finally
+        {
+            if (Plants == null || Plants.Count == 0)
+            {
+                inputError = "Plants were not returned.";    
+            }
+
+            loading = false;
+            
+        }
     }
 }
