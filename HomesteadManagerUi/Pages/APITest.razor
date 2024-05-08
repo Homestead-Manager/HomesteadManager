@@ -81,7 +81,7 @@ else
     private string inputError = "";
     private string outputMessage = "";
     private string zipCode = "";
-    private List<PlantZoneInfo> Plants;
+    private List<PlantZoneInfo> Plants = new();
     private bool loading = false;
 
     protected override async Task OnInitializedAsync()
@@ -89,7 +89,7 @@ else
         message = await api.GetHelloWorld();
     }
 
-    private async void GetPlants()
+    private async Task GetPlants()
     {
         try
         {
