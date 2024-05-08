@@ -55,9 +55,9 @@
 @code
 {
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        generateBS();
+        generateRows();
     }
 
     private Boolean customCanDrop(DropItem item, string identifier)
@@ -283,6 +283,28 @@ new DropItemType() { Icon = "1F955", Tooltip = "Carrot" },
                     dropItemTypes[randomNum].Tooltip,
                         Identifier = i > 10 ? i.ToString() : "0" + i.ToString()
                     });
+            }
+        }
+    }
+
+     private void generateRows()
+    {
+        var plantNumber = 0;
+        for (var i = 0; i < 8; i ++){
+            if(i != 0 && i % 2 == 0){
+                    plantNumber++;
+            }
+            for (var j = 0; j < 8; j++)
+            {
+
+                _items.Add(new DropItem()
+                    {
+                        Icon = dropItemTypes[plantNumber].Icon,
+                        Tooltip =
+                    dropItemTypes[plantNumber].Tooltip,
+                        Identifier =  j.ToString() + i.ToString()
+                    });
+
             }
         }
     }
