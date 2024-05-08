@@ -8,7 +8,7 @@
 <div>
 @if (String.IsNullOrEmpty(message))
 {
-    <MudText>Loading...</MudText>
+    <MudText>API Status: Loading...</MudText>
 }
 else
 {
@@ -97,6 +97,7 @@ else
             inputError = "";
             outputMessage = "";
             outputMessageClass = "";
+            loadErrorMessage = "";
             loadMessage = "Loading Plant Data...";
 
             if (string.IsNullOrWhiteSpace(zipCode))
