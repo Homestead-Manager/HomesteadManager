@@ -20,6 +20,10 @@ else
     Enter your zip code to retrieve a list of plants you can grow.
 </div>
 <div>
+    @if(!string.IsNullOrEmpty(inputError))
+    {
+        <div class="validation-message">@inputError</div>
+    }
     <MudInput T="String" Value="zipCode" ValueChanged="(value) => zipCode= value " FullWidth="false" Variant="Variant.Filled" Placeholder="Zip Code (Required)" />
 </div>
 <div>
@@ -27,13 +31,14 @@ else
 </div>
 
 <div>
-    @if(Plants == null)
+    @if (!string.IsNullOrEmpty(outputMessage))
+    {
+        <div>@outputMessage</div>
+    }
+
+    @if (Plants == null || Plants.Count == 0)
     {
         <div>Loading Plant Data...</div>
-    }
-    else if (Plants.Count == 0)
-    {
-        <div>No Plant data returned.</div>
     }
     else
     {
@@ -62,24 +67,57 @@ else
         </table>
     }
 </div>
+    @if (loading)
+    {
+        <div>
+        <svg class="loading-progress">
+            <circle r="40%" cx="50%" cy="50%" />
+            <circle r="40%" cx="50%" cy="50%" />
+        </svg>
+        <div class="loading-progress-text"></div>
+        </div>
+    }
 
 @code {
-    private string message;
+    private string message = "";
+    private string inputError = "";
+    private string outputMessage = "";
     private string zipCode = "";
-    private List<PlantZoneInfo> Plants;
+    private List<PlantZoneInfo> Plants = new();
+    private bool loading = false;
 
     protected override async Task OnInitializedAsync()
     {
         message = await api.GetHelloWorld();
     }
 
-    private async void GetPlants()
+    private async Task GetPlants()
     {
-        if (string.IsNullOrWhiteSpace(zipCode))
+        try
         {
-            return;
-        }
+            loading = true;
+            inputError = "";
+            if (string.IsNullOrWhiteSpace(zipCode))
+            {
+                inputError = "Zip code is required.";
+                return;
+            }
 
-        Plants = await api.GetPlants(zipCode);
+            Plants = await api.GetPlants(zipCode);
+        }
+        finally
+        {
+            if (Plants == null || Plants.Count == 0)
+            {
+                outputMessage = "Plants were not returned.";    
+            }
+            else
+            {
+                outputMessage = "We have plants!";
+            }
+
+            loading = false;
+            
+        }
     }
 }

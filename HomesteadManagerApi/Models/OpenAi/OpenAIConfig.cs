@@ -4,5 +4,6 @@ namespace HomesteadManagerApi.Models
     {
         public string EndpointUrl { get; set; }
         public string ApiKey { get; set; }
+        public string ModelName { get; set; }
     }
 }

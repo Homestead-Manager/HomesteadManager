@@ -20,7 +20,7 @@ namespace HomesteadManagerUi.Services
 
         public async Task<List<PlantZoneInfo>> GetPlants(string zipCode)
         {
-            return await _httpClient.GetFromJsonAsync<List<PlantZoneInfo>>($"/api/chat/plants?zipCode={zipCode}");
+            return await _httpClient.GetFromJsonAsync<List<PlantZoneInfo>>($"/api/chat/plants?zipCode={zipCode}") ?? [];
         }
 
         public async Task<Garden?> GetSuggestedLayout(GardenRecommendationRequest request)
