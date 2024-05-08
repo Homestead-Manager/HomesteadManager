@@ -62,8 +62,10 @@
 
     private Boolean customCanDrop(DropItem item, string identifier)
     {
+         var plantToSwap = _items.Find(x => x.Identifier.Equals(identifier));
 
-        if (checkIfIdentifierExists(identifier) == true && item.Link.ToString() == "00000000-0000-0000-0000-000000000000")
+        if (checkIfIdentifierExists(identifier) == true && item.Link.ToString() == "00000000-0000-0000-0000-000000000000"
+            && plantToSwap.Link.ToString() != "00000000-0000-0000-0000-000000000000")
         {
             return false;
         }
@@ -118,11 +120,6 @@
                 var linkedPosition = getNewLinkedPosition(identifier, linkedPlant);
                 linkedNewPositionList.Add(linkedPosition);
 
-                Console.Write("Original. Position: ");
-                Console.WriteLine(linkedPlant.Identifier);
-                Console.Write("Linked Position: ");
-                Console.WriteLine(linkedPosition);
-
                 var tempLinkedPlant = linkedPlant;
 
                 linkedPlant = _items.Find(x => x.Link.Equals(linkedPlant.Id));
@@ -153,13 +150,9 @@
     private Boolean checkIfPositionOutOfBounds(String position)
     {
 
-        Console.Write("Reg position: ");
-        Console.WriteLine(position);
         string pattern = @"^[0-9]{2}$";
-        // Create a Regex
         Regex re = new Regex(pattern);
 
-        Console.WriteLine(re.IsMatch(position));
         if (re.IsMatch(position) == true && Int32.Parse(position) <= 77 && Int32.Parse(position[1].ToString()) <= 7)
         {
             return false;
@@ -171,12 +164,26 @@
     }
     private void ItemUpdated(MudItemDropInfo<DropItem> dropItem)
     {
+        var tempIdentifier = dropItem.Item.Identifier;
+        var plantToSwap = _items.Find(x => x.Identifier.Equals(dropItem.DropzoneIdentifier));
         dropItem.Item.Identifier = dropItem.DropzoneIdentifier;
+
+        if(plantToSwap != null && plantToSwap.Link.ToString() == "00000000-0000-0000-0000-000000000000"){
+
+            plantToSwap.Identifier = tempIdentifier;
+        }
 
         if (dropItem.Item.Link.ToString() != "00000000-0000-0000-0000-000000000000" && dropItem.Item.Identifier.Equals("New Plant") != true)
         {
             setLinkedPlants(dropItem);
         }
+
+    }
+
+
+    private void swapPlants(DropItem item, string identifier){
+        var plantToSwap = _items.Find(x => x.Identifier.Equals(identifier));
+
 
     }
 
@@ -206,19 +213,13 @@
 
         if (linkedPlant.LinkPosition.Equals("Down"))
         {
-            Console.WriteLine("Down");
-
             int newColumnNumber = Int32.Parse(originalPlantIdentifier[0].ToString()) + 1;
-
-            Console.Write("Output: ");
-            Console.WriteLine(newColumnNumber.ToString() + originalPlantIdentifier[1]);
 
             return newColumnNumber.ToString() + originalPlantIdentifier[1];
         }
 
         if (linkedPlant.LinkPosition.Equals("Right"))
         {
-            Console.WriteLine("Right");
             int newRowNumber = Int32.Parse(originalPlantIdentifier[1].ToString()) + 1;
 
             return originalPlantIdentifier[0] + newRowNumber.ToString();
@@ -226,17 +227,13 @@
 
         if (linkedPlant.LinkPosition.Equals("Up"))
         {
-            Console.WriteLine("Up");
             int newColumnNumber = Int32.Parse(originalPlantIdentifier[0].ToString()) - 1;
 
-            Console.Write("Output: ");
-            Console.WriteLine(newColumnNumber.ToString() + originalPlantIdentifier[1]);
             return newColumnNumber.ToString() + originalPlantIdentifier[1];
         }
 
         if (linkedPlant.LinkPosition.Equals("Left"))
         {
-            Console.WriteLine("Left");
             int newRowNumber = Int32.Parse(originalPlantIdentifier[1].ToString()) - 1;
 
             return originalPlantIdentifier[0] + newRowNumber.ToString();
@@ -276,8 +273,6 @@ new DropItemType() { Icon = "1F955", Tooltip = "Carrot" },
             {
                 skip = true;
             }
-
-            Console.WriteLine(randomNum);
 
             if (randomNum != 4 && skip == false)
             {
@@ -444,8 +439,6 @@ new DropItem(){ Icon = "1F955", Tooltip="Carrot", Identifier = "77" },
 
         var secondPlant = _items.Find(x => x.Link.Equals(firstPlant.Id));
 
-        //firstPlant.Link = secondPlant.Id;
-
         _items.Add(new DropItem()
             {
                 Id = Guid.NewGuid(),
@@ -457,8 +450,6 @@ new DropItem(){ Icon = "1F955", Tooltip="Carrot", Identifier = "77" },
             });
 
         var thirdPlant = _items.Find(x => x.Link.Equals(secondPlant.Id));
-
-        //thirdPlant.Link = secondPlant.Id;
 
         _items.Add(new DropItem()
             {
@@ -472,7 +463,6 @@ new DropItem(){ Icon = "1F955", Tooltip="Carrot", Identifier = "77" },
 
         var fourthPlant = _items.Find(x => x.Link.Equals(thirdPlant.Id));
 
-        //fourthPlant.Link = thirdPlant.Id;
         firstPlant.Link = fourthPlant.Id;
     }
 
