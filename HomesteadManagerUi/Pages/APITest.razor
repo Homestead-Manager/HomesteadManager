@@ -36,16 +36,12 @@ else
         <MudText class="validation-message">@outputMessage</MudText>
     }
 
-    @if (!string.IsNullOrEmpty(loadError))
+    @if (!string.IsNullOrEmpty(loadMessage))
     {
-        <MudText class="validation-message">@loadError</MudText>
+        <MudText class="@loadMessageClass">@loadMessage</MudText>
     }
 
-    @if (Plants == null || Plants.Count == 0)
-    {
-        <MudText>Loading Plant Data...</MudText>
-    }
-    else
+    @if (Plants != null && Plants.Count > 0)
     {
         <MudTable Items="Plants">
             <HeaderContent>
@@ -74,7 +70,8 @@ else
     private string message = "";
     private string inputError = "";
     private string outputMessage = "";
-    private string loadError = "";
+    private string loadMessage = "";
+    private string loadMessageClass = "";
     private string zipCode = "";
     private List<PlantZoneInfo> Plants = new();
     private bool loading = false;
@@ -91,7 +88,8 @@ else
             loading = true;
             inputError = "";
             outputMessage = "";
-            loadError = "";
+            loadMessage = "Loading Plant Data...";
+            loadMessageClass = "";
 
             if (string.IsNullOrWhiteSpace(zipCode))
             {
@@ -104,7 +102,8 @@ else
         catch(Exception ex)
         {
             Console.WriteLine(ex.Message);
-            loadError = "Error loading plants. Please try again later.";
+            loadMessage = "Error loading plants. Please try again later.";
+            loadMessageClass = "validation-message";
         }
         finally
         {
