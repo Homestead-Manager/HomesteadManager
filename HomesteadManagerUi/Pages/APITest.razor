@@ -31,18 +31,14 @@ else
 </div>
 
 <div>
-    @if (!string.IsNullOrEmpty(inputError))
+    @if (!string.IsNullOrEmpty(outputMessage))
     {
         <div class="validation-message">@outputMessage</div>
     }
 
-    @if(Plants == null)
+    @if (Plants == null || Plants.Count == 0)
     {
         <div>Loading Plant Data...</div>
-    }
-    else if (Plants.Count == 0)
-    {
-        <div>No Plant data returned.</div>
     }
     else
     {
@@ -93,7 +89,6 @@ else
     {
         try
         {
-
             loading = true;
             inputError = "";
             if (string.IsNullOrWhiteSpace(zipCode))
