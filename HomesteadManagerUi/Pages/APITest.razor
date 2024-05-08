@@ -70,6 +70,7 @@ else
     private string message = "";
     private string inputError = "";
     private string outputMessage = "";
+    private string outputMessageClass = "";
     private string loadMessage = "";
     private string loadMessageClass = "";
     private string zipCode = "";
@@ -88,6 +89,7 @@ else
             loading = true;
             inputError = "";
             outputMessage = "";
+            outputMessageClass = "";
             loadMessage = "Loading Plant Data...";
             loadMessageClass = "";
 
@@ -109,11 +111,13 @@ else
         {
             if (Plants == null || Plants.Count == 0)
             {
-                outputMessage = "Plants were not returned.";    
+                outputMessage = "Plants were not returned.";
+                outputMessageClass = "validation-message";
             }
             else
             {
                 outputMessage = "We have plants!";
+                outputMessageClass = "";
             }
 
             loading = false;
