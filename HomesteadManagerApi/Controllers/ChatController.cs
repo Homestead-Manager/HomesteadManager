@@ -35,10 +35,10 @@ namespace HomesteadManagerApi.Controllers
             return NotFound("AssistantResponse returned null.");
         }
 
-        [HttpGet("hello")]
-        public ActionResult<string> Hello()
+        [HttpGet("healthcheck")]
+        public ActionResult<string> Healthcheck()
         {
-            return Ok("Hello World");
+            return Ok("Healthy");
         }
 
         [HttpPost("garden")]

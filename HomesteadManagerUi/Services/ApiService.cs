@@ -14,9 +14,9 @@ namespace HomesteadManagerUi.Services
             _httpClient = httpClient;
         }
 
-        public async Task<string> GetHelloWorld()
+        public async Task<string> GetHealthcheck()
         {
-            return await _httpClient.GetStringAsync("/api/chat/hello");
+            return await _httpClient.GetStringAsync("/api/chat/healthcheck");
         }
 
         public async Task<List<PlantZoneInfo>> GetPlants(string zipCode)

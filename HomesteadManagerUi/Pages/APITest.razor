@@ -12,7 +12,7 @@
 }
 else
 {
-    <MudText>@message</MudText>
+    <MudText>API Status: @message</MudText>
 }
 </div>
 
@@ -33,7 +33,12 @@ else
 <div>
     @if (!string.IsNullOrEmpty(outputMessage))
     {
-        <MudText>@outputMessage</MudText>
+        <MudText class="validation-message">@outputMessage</MudText>
+    }
+
+    @if (!string.IsNullOrEmpty(loadError))
+    {
+        <MudText class="validation-message">@loadError</MudText>
     }
 
     @if (Plants == null || Plants.Count == 0)
@@ -69,13 +74,14 @@ else
     private string message = "";
     private string inputError = "";
     private string outputMessage = "";
+    private string loadError = "";
     private string zipCode = "";
     private List<PlantZoneInfo> Plants = new();
     private bool loading = false;
 
     protected override async Task OnInitializedAsync()
     {
-        message = await api.GetHelloWorld();
+        message = await api.GetHealthcheck();
     }
 
     private async Task GetPlants()
@@ -84,6 +90,9 @@ else
         {
             loading = true;
             inputError = "";
+            outputMessage = "";
+            loadError = "";
+
             if (string.IsNullOrWhiteSpace(zipCode))
             {
                 inputError = "Zip code is required.";
@@ -91,6 +100,11 @@ else
             }
 
             Plants = await api.GetPlants(zipCode);
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            loadError = "Error loading plants. Please try again later.";
         }
         finally
         {
@@ -104,7 +118,6 @@ else
             }
 
             loading = false;
-
         }
     }
 }
