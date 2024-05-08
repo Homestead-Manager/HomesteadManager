@@ -33,7 +33,7 @@ else
 <div>
     @if (!string.IsNullOrEmpty(outputMessage))
     {
-        <div class="validation-message">@outputMessage</div>
+        <div>@outputMessage</div>
     }
 
     @if (Plants == null || Plants.Count == 0)
@@ -69,7 +69,7 @@ else
 </div>
     @if (loading)
     {
-        <div class="loading-progress">Getting data from the API...</div>
+        <div class="loading-progress-text">Getting data from the API...</div>
     }
 
 @code {
