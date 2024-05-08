@@ -1,5 +1,6 @@
 using HomesteadManager.Shared.Models;
 using HomesteadManager.Shared.Requests;
+using HomesteadManager.Shared.Responses;
 using HomesteadManagerApi.Interfaces;
 using HomesteadManagerApi.Models.OpenAi;
 using Microsoft.AspNetCore.Mvc;
@@ -43,8 +44,8 @@ namespace HomesteadManagerApi.Controllers
         [HttpPost("garden")]
         public async Task<ActionResult<Garden>> GetRecommendedGarden(GardenRecommendationRequest request)
         {
-            var schema = "{\"beds\":[{\"bedID\":0,\"bedPlants\":[{\"plant\":{\"plantID\":0,\"commonName\":\"string\"}}]}]}";
-            var prompt = $"I have these garden plots: {JsonConvert.SerializeObject(request.Beds)}. " +
+            var schema = "{ \"Gardens\": [{\"GardenId\": 0, \"Dimensions\": { \"Width\": 3, \"Length\": 4, \"Unit\": \"feet\" },\"Plants\": [{ \"Plant\": \"Tomatoes\", \"Quantity\": 2 }], \"Notes\": \"any extra notes\"}]}";
+            var prompt = $"I have these garden plots: {JsonConvert.SerializeObject(request.Gardens)}. " +
                 $"Using these plots, give a recommended garden layout in zone {request.ZoneCode} based on companion plants and succession planting " +
                 $"using these plants: {JsonConvert.SerializeObject(request.Plants)}. " +
                 $"Respond with a list of JSON objects in this format: {schema}";
@@ -53,7 +54,7 @@ namespace HomesteadManagerApi.Controllers
 
             if (assistantResponse != null)
             {
-                var gardenResponse = JsonConvert.DeserializeObject<Garden>(assistantResponse?.Message?.Content ?? string.Empty);
+                var gardenResponse = JsonConvert.DeserializeObject<GardenResponse>(assistantResponse?.Message?.Content ?? string.Empty);
                 return Ok(gardenResponse);
             }
 
