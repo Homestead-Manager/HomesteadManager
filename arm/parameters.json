@@ -1,0 +1,30 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sites_webapp_farmersonly_eus2_name": {
+            "value": null
+        },
+        "staticSites_web_farmersonly_eus2_name": {
+            "value": null
+        },
+        "serverfarms_ASP_rgfarmersonlyeus2_a191_name": {
+            "value": null
+        },
+        "components_webapp_farmersonly_eus2_name": {
+            "value": null
+        },
+        "accounts_ai_farmersonly_eus2_name": {
+            "value": null
+        },
+        "smartdetectoralertrules_failure_anomalies___webapp_farmersonly_eus2_name": {
+            "value": null
+        },
+        "actiongroups_application_insights_smart_detection_externalid": {
+            "value": null
+        },
+        "workspaces_DefaultWorkspace_b112ca69_387c_4da7_b2d5_a2b8bd66a09a_EUS_externalid": {
+            "value": null
+        }
+    }
+}
