@@ -59,7 +59,7 @@ else
                         <td>@plant.ZoneID</td>
                         <td>@plant.Plant.CommonName</td>
                         <td>@plant.SowingMethod</td>
-                        <td>@plant.OptimalSowingPeriodStart to @plant.OptimalSowingPeriodEnd</td>
+                        <td>@plant.OptimalSowingPeriod</td>
                         <td>@plant.ZoneSpecificNotes</td>
                     </tr>
                 }
@@ -69,13 +69,7 @@ else
 </div>
     @if (loading)
     {
-        <div>
-        <svg class="loading-progress">
-            <circle r="40%" cx="50%" cy="50%" />
-            <circle r="40%" cx="50%" cy="50%" />
-        </svg>
-        <div class="loading-progress-text"></div>
-        </div>
+    <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
     }
 
 @code {
@@ -117,7 +111,7 @@ else
             }
 
             loading = false;
-            
+
         }
     }
 }

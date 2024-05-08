@@ -18,4 +18,15 @@ public class PlantZoneInfo
 
     // This could also include notes on growing conditions or care instructions specific to the zone
     public string ZoneSpecificNotes { get; set; }
+
+    public string OptimalSowingPeriod
+    {
+        get
+        {
+            DateTime startDate = OptimalSowingPeriodStart ?? DateTime.Today;
+            DateTime endDate = OptimalSowingPeriodEnd ?? DateTime.Today;
+
+            return $"{startDate:MMMM} to {endDate:MMMM}";
+        }
+    }
 }
