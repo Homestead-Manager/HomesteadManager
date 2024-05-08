@@ -2,9 +2,9 @@ using HomesteadManager.Shared.Models;
 
 namespace HomesteadManager.Shared.Requests
 {
-    public class BedRequest
+    public class GardenRequest
     {
-        public int BedId { get; set; }
+        public int GardenID { get; set; }
         public Size Size { get; set; }
     }
 }

@@ -1,0 +1,100 @@
+@page "/generate"
+@using HomesteadManager.Shared.Requests
+@using HomesteadManagerUi.Services
+@inject NavigationManager _nav
+@inject ApiService api
+<style>
+    ul {
+        list-style-type: square;
+    }
+</style>
+<PageTitle>Suggest Layout</PageTitle>
+<div>Gardens: @request.Gardens.Count</div>
+<div>Total Size: @GetTotalSize() feet</div>
+<div>Plants</div>
+<ul>
+    @foreach (var p in request.Plants)
+    {
+        <li class="ml-5">@p.CommonName</li>
+    }
+</ul>
+<MudButton class="mt-3" Variant="Variant.Filled" Color="Color.Primary" OnClick="()=> GetSuggestedLayout()">Suggest
+    Layout</MudButton>
+
+
+
+@code {
+
+    GardenRecommendationRequest request = new()
+        {
+            ZoneCode = "7a",
+            Plants = new() {
+new() {
+PlantID = 1,
+CommonName = "Tomato"
+},
+new() {
+PlantID = 2,
+CommonName = "Jalapeno"
+},
+new() {
+PlantID = 3,
+CommonName = "Cucumber"
+},
+new() {
+PlantID = 4,
+CommonName = "Cabbage"
+},
+new() {
+PlantID = 5,
+CommonName = "Borage"
+}
+},
+            Gardens = new() {
+new() {
+GardenID = 1,
+Size = new() {
+Length = 4,
+Width = 3,
+}
+},
+new() {
+GardenID = 2,
+Size = new() {
+Length = 4,
+Width = 3,
+}
+},
+new() {
+GardenID = 3,
+Size = new() {
+Length = 4,
+Width = 3,
+}
+},
+new() {
+GardenID = 4,
+Size = new() {
+Length = 6,
+Width = 3,
+}
+},
+new() {
+GardenID = 5,
+Size = new() {
+Length = 6,
+Width = 3,
+}
+},
+}
+        };
+    private async void GetSuggestedLayout()
+    {
+        var garden = await api.GetSuggestedLayout(request);
+    }
+
+    private int GetTotalSize()
+    {
+        return request.Gardens.Select(g => g.Size.Length * g.Size.Width).Aggregate((acc, x) => acc + x);
+    }
+}
