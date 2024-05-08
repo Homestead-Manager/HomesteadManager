@@ -10,8 +10,8 @@ namespace HomesteadManager.Shared.Responses
     {
         public int GardenID { get; set; }
         public Size Dimensions { get; set; }
-        public List<GardenResponseItem> Plants { get; set; }
-        public string? Notes;
+        public List<GardenPlantResponse> Plants { get; set; }
+        public string Notes { get; set; }
 
     }
 
