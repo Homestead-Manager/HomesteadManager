@@ -20,6 +20,10 @@ else
     Enter your zip code to retrieve a list of plants you can grow.
 </div>
 <div>
+    @if(!string.IsNullOrEmpty(inputError))
+    {
+        <div class="validation-message">@inputError</div>
+    }
     <MudInput T="String" Value="zipCode" ValueChanged="(value) => zipCode= value " FullWidth="false" Variant="Variant.Filled" Placeholder="Zip Code (Required)" />
 </div>
 <div>
@@ -62,11 +66,18 @@ else
         </table>
     }
 </div>
-
+<div>
+    @if (loading)
+    {
+        <div class="loading-progress">Getting data from the API...</div>
+    }
+</div>
 @code {
     private string message;
+    private string inputError = "";
     private string zipCode = "";
     private List<PlantZoneInfo> Plants;
+    private bool loading = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -75,11 +86,15 @@ else
 
     private async void GetPlants()
     {
+        loading = true;
+        inputError = "";
         if (string.IsNullOrWhiteSpace(zipCode))
         {
+            inputError = "Zip code is required.";
             return;
         }
 
         Plants = await api.GetPlants(zipCode);
+        loading = false;
     }
 }
