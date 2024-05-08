@@ -23,8 +23,8 @@
     }
 </style>
 <PageTitle>Suggest Layout</PageTitle>
-<div class="ma-3 d-flex gap-2">
-    <div class="left-flex">
+<div class="ma-3">
+    <div>
         <div>Gardens: @request.Gardens.Count</div>
         <div>Total Size: @GetTotalSize() feet</div>
         <div>Plants</div>
@@ -38,7 +38,7 @@
             Suggest
             Layout</MudButton>
     </div>
-    <div>
+    <div class="mt-2">
         @if (loading)
         {
             <MudProgressCircular Color="Color.Default" Indeterminate="true" />
