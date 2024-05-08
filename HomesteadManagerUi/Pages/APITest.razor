@@ -8,21 +8,21 @@
 <div>
 @if (String.IsNullOrEmpty(message))
 {
-    <p>Loading...</p>
+    <MudText>Loading...</MudText>
 }
 else
 {
-    <p>@message</p>
+    <MudText>@message</MudText>
 }
 </div>
 
-<div>
+<MudText>
     Enter your zip code to retrieve a list of plants you can grow.
-</div>
+</MudText>
 <div>
     @if(!string.IsNullOrEmpty(inputError))
     {
-        <div class="validation-message">@inputError</div>
+        <MudText class="validation-message">@inputError</MudText>
     }
     <MudInput T="String" Value="zipCode" ValueChanged="(value) => zipCode= value " FullWidth="false" Variant="Variant.Filled" Placeholder="Zip Code (Required)" />
 </div>
@@ -33,38 +33,31 @@ else
 <div>
     @if (!string.IsNullOrEmpty(outputMessage))
     {
-        <div>@outputMessage</div>
+        <MudText>@outputMessage</MudText>
     }
 
     @if (Plants == null || Plants.Count == 0)
     {
-        <div>Loading Plant Data...</div>
+        <MudText>Loading Plant Data...</MudText>
     }
     else
     {
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Zone</th>
-                    <th>Common Name</th>
-                    <th>Sowing Method</th>
-                    <th>Optimal Sowing Dates</th>
-                    <th>Zone Specific Notes</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var plant in Plants)
-                {
-                    <tr>
-                        <td>@plant.ZoneID</td>
-                        <td>@plant.Plant.CommonName</td>
-                        <td>@plant.SowingMethod</td>
-                        <td>@plant.OptimalSowingPeriod</td>
-                        <td>@plant.ZoneSpecificNotes</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        <MudTable Items="Plants">
+            <HeaderContent>
+                <MudTh>Zone</MudTh>
+                <MudTh>Common Name</MudTh>
+                <MudTh>Sowing Method</MudTh>
+                <MudTh>Optimal Sowing Dates</MudTh>
+                <MudTh>Zone Specific Notes</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd>@context.ZoneID</MudTd>
+                <MudTd>@context.Plant.CommonName</MudTd>
+                <MudTd>@context.SowingMethod</MudTd>
+                <MudTd>@context.OptimalSowingPeriod</MudTd>
+                <MudTd>@context.ZoneSpecificNotes</MudTd>
+            </RowTemplate>
+        </MudTable>
     }
 </div>
     @if (loading)
