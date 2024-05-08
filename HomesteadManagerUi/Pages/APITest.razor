@@ -17,12 +17,12 @@ else
 </div>
 
 <MudText>
-    Enter your zip code to retrieve a list of plants you can grow.
+    Enter your zip code to retrieve a list of plants you can grow in your area.
 </MudText>
 <div>
     @if(!string.IsNullOrEmpty(inputError))
     {
-        <MudText class="validation-message">@inputError</MudText>
+        <MudText class="@errorMessageClass">@inputError</MudText>
     }
     <MudInput T="String" Value="zipCode" ValueChanged="(value) => zipCode= value " FullWidth="false" Variant="Variant.Filled" Placeholder="Zip Code (Required)" />
 </div>
@@ -33,12 +33,17 @@ else
 <div>
     @if (!string.IsNullOrEmpty(outputMessage))
     {
-        <MudText class="validation-message">@outputMessage</MudText>
+        <MudText class="@outputMessageClass">@outputMessage</MudText>
     }
 
     @if (!string.IsNullOrEmpty(loadMessage))
     {
-        <MudText class="@loadMessageClass">@loadMessage</MudText>
+        <MudText>@loadMessage</MudText>
+    }
+
+    @if (!string.IsNullOrEmpty(loadErrorMessage))
+    {
+        <MudText class="@errorMessageClass">@loadErrorMessage</MudText>
     }
 
     @if (Plants != null && Plants.Count > 0)
@@ -71,8 +76,10 @@ else
     private string inputError = "";
     private string outputMessage = "";
     private string outputMessageClass = "";
+    private string loadErrorMessage = "";
+    private string loadErrorMessageClass = "";
     private string loadMessage = "";
-    private string loadMessageClass = "";
+    private string errorMessageClass = "validation-message";
     private string zipCode = "";
     private List<PlantZoneInfo> Plants = new();
     private bool loading = false;
@@ -91,7 +98,6 @@ else
             outputMessage = "";
             outputMessageClass = "";
             loadMessage = "Loading Plant Data...";
-            loadMessageClass = "";
 
             if (string.IsNullOrWhiteSpace(zipCode))
             {
@@ -104,15 +110,14 @@ else
         catch(Exception ex)
         {
             Console.WriteLine(ex.Message);
-            loadMessage = "Error loading plants. Please try again later.";
-            loadMessageClass = "validation-message";
+            loadErrorMessage = "Error loading plants. Please try again later.";
         }
         finally
         {
             if (Plants == null || Plants.Count == 0)
             {
                 outputMessage = "Plants were not returned.";
-                outputMessageClass = "validation-message";
+                outputMessageClass = errorMessageClass;
             }
             else
             {
@@ -120,6 +125,7 @@ else
                 outputMessageClass = "";
             }
 
+            loadMessage = "";
             loading = false;
         }
     }
